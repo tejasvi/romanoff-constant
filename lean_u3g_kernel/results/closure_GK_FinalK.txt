@@ -1,0 +1,4 @@
+closure of GK.FinalK: 8557 project modules; external roots: ['Mathlib']
+conflicting copies: 0
+lines mentioning native_decide / ofReduceBool / implemented_by / @[extern: 1
+   ('RCert.G.Ev', 6, '# U3g/V4g stage 2: the evaluator of the minorants at period 27720 = 360 · 7 · 11 (core Lean, compiled for `native_decide')

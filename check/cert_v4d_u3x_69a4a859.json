@@ -1,0 +1,40 @@
+{
+ "format": "r45a-u3x",
+ "tail_mode": "alpha_simplex",
+ "params": {
+  "ELL": [
+   3,
+   5,
+   7,
+   11,
+   13,
+   17,
+   31,
+   241,
+   41,
+   19,
+   73,
+   37
+  ],
+  "CAP": "8",
+  "C1": "67814/10000",
+  "C0_up": "66016181584686958/100000000000000000",
+  "log2_low": "693147180559945309/1000000000000000000",
+  "log2_up": "693147180559945310/1000000000000000000",
+  "R0_up": "193656/100000",
+  "note": "CONDITIONAL on (I2) (Johnston-Trudgian Prop. 2 from Lichtman): budget constant C1 = 6.7814."
+ },
+ "PER": 360,
+ "alpha_j": {
+  "360": "1"
+ },
+ "note": "CONDITIONAL U3d: BASE (period 120) + ADD [41, 19, 73, 37] (period 360; 37 last), divisor form. Uniform budget multiplier mu = 4.773315e-05 (= 3.676e-3 norm).",
+ "ADD": [
+  41,
+  19,
+  73,
+  37
+ ],
+ "n_base_orbits": 7870,
+ "mu": "47733153/1000000000000"
+}

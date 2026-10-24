@@ -1,0 +1,6 @@
+Romanoff.G.romanoff_U3g_K : Romanoff.ESP28 Romanoff.G.ell →
+  Romanoff.PNTAP Romanoff.G.ell → Romanoff.R0Bound → Romanoff.G.U3gStatement
+Romanoff.G.romanoff_V4g_K : Romanoff.ESP28 Romanoff.G.ell →
+  Romanoff.JTProp2 → Romanoff.PNTAP Romanoff.G.ell → Romanoff.R0Bound → Romanoff.G.V4gStatement
+'Romanoff.G.romanoff_U3g_K' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Romanoff.G.romanoff_V4g_K' depends on axioms: [propext, Classical.choice, Quot.sound]

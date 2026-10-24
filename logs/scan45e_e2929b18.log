@@ -1,0 +1,7 @@
+class (a) 721 primes R0_a 1.935231965; class (b) 3231 primes R0_b 0.001132202; tail 1.9583e-04 (59s)
+base ELL=[3, 5, 7, 11, 13, 17, 31, 241] PER=120 patterns=859201 orbits=7870 (72s)
+base+[41, 19]: conditional (C1 = 6.7814) best mu/norm 3.700000e-03 (mu 4.610593e-05): bound 0.118460048 (argmin vertex index 24; grid 5.000e-04..1.990e-02) (253s)
+base+[41, 19] (fine): conditional (C1 = 6.7814) best mu/norm 3.676000e-03 (mu 4.580686e-05): bound 0.118463398 (argmin vertex index 24; grid 3.500e-03..3.900e-03) (296s)
++73: conditional (C1 = 6.7814) best mu/norm 3.700000e-03 (mu 4.674629e-05): bound 0.118598448 (argmin vertex index 24; grid 5.000e-04..1.990e-02) (1036s)
++73 (fine): conditional (C1 = 6.7814) best mu/norm 3.676000e-03 (mu 4.644307e-05): bound 0.118602159 (argmin vertex index 24; grid 3.500e-03..3.900e-03) (1114s)
+rc=0

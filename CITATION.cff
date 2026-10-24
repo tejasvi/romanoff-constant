@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, these data or the Lean proofs, please cite the paper."
+title: "New lower bounds for Romanoff's constant"
+authors:
+  - family-names: Tomar
+    given-names: Tejasvi Singh
+    orcid: "https://orcid.org/0000-0003-4668-3639"
+license: Apache-2.0
+version: "10"
+repository-code: "https://github.com/tejasvi/romanoff-constant-v10"
+doi: 10.5281/zenodo.23609840
+preferred-citation:
+  type: article
+  title: "New lower bounds for Romanoff's constant"
+  authors:
+    - family-names: Tomar
+      given-names: Tejasvi Singh
+      orcid: "https://orcid.org/0000-0003-4668-3639"
+  doi: 10.5281/zenodo.23609839
+  year: 2026

@@ -1,0 +1,10 @@
+[0] params: ELL=[3, 5, 7, 11, 13, 17, 31, 41, 241] CAP=8 C1=8 C0_up=33008090792343479/50000000000000000 log2 in [693147180559945309/1000000000000000000, 69314718055994531/100000000000000000] R0_up=24207/12500 tail_mode=crude LMAX=3000000 FACBIG=yes, T1=1200
+[1] factorizations verified to T0=300: 721 primes (0s)
+[2b] class (b): 3231 proven primes, orders 301..1200; T_b(0) <= 3.858e-03; R0_b >= 0.001132202 (394s)
+[2] T_up(0)=1.129251718  tail mass <= 1.9583e-04 (394s)
+[3] patterns 10815601, orbits 92206 (754s)
+[4] Lagrangian evaluation over 92206 orbits (1457s)
+CERTIFIED: lower density of {p + 2^a} >= 0.109406225
+rounded down: 0.109406
+PASS: certified bound >= claim 0.109406
+rc=0 wall=1459s

@@ -1,0 +1,111 @@
+[0] params: ELL=[3, 5, 7, 11, 13, 17, 31, 241, 41, 19, 73, 23, 37, 43, 29] CAP=8 C1=33907/5000 C0_up=33008090792343479/50000000000000000 log2 in [693147180559945309/1000000000000000000, 69314718055994531/100000000000000000] R0_up=24207/12500 tail_mode=alpha_simplex LMAX=3000000 FACBIG=yes, T1=1200
+[1] factorizations verified to T0=300: 721 primes (0s)
+[2b] class (b): 3231 proven primes, orders 301..1200; T_b(0) <= 1.742e-02; R0_b >= 0.001132202 (136s)
+[2] divisor form: T_up(0) <= 1.197671653  tail mass <= 1.9583e-04 (136s)
+[0f] CONDITIONAL on (I2): uniform budget multiplier mu = 687217/1000000000000, budget constant C1 = 33907/5000
+[3f] BASE [3, 5, 7, 11, 13, 17, 31, 241]: PER0 120, orbits 7870; core ADD [41, 19, 73, 37] (PERc 360); independent q=7: [(43, 2), (29, 4)]; q=11: [(23, 1)]; PER 27720 (145s)
+[3f] v3 patterns: q=7: 23, q=11: 2; combined 46; M 4; divisors 96 (core 24); core-row chunk 3799 (145s)
+[3f] rows evaluated: Pintz indices j in [1, 42], 42 groups (2118s)
+  vertex alpha = 0: minorant 0.119267150951
+  vertex alpha = R0tail e_1: minorant 0.119246576082
+  vertex alpha = R0tail e_2: minorant 0.119233932791
+  vertex alpha = R0tail e_3: minorant 0.119241295967
+  vertex alpha = R0tail e_4: minorant 0.119222779783
+  vertex alpha = R0tail e_5: minorant 0.119243713157
+  vertex alpha = R0tail e_6: minorant 0.119224618383
+  vertex alpha = R0tail e_7: minorant 0.119245765095
+  vertex alpha = R0tail e_8: minorant 0.119219887749
+  vertex alpha = R0tail e_9: minorant 0.119239673743
+  vertex alpha = R0tail e_10: minorant 0.119228458273
+  vertex alpha = R0tail e_11: minorant 0.119245627678
+  vertex alpha = R0tail e_12: minorant 0.119208624945
+  vertex alpha = R0tail e_14: minorant 0.119232310815
+  vertex alpha = R0tail e_15: minorant 0.119237609089
+  vertex alpha = R0tail e_18: minorant 0.119221472762
+  vertex alpha = R0tail e_20: minorant 0.119214985521
+  vertex alpha = R0tail e_21: minorant 0.119240240369
+  vertex alpha = R0tail e_22: minorant 0.119232387677
+  vertex alpha = R0tail e_24: minorant 0.119204705181
+  vertex alpha = R0tail e_28: minorant 0.119220076921
+  vertex alpha = R0tail e_30: minorant 0.119217542908
+  vertex alpha = R0tail e_33: minorant 0.119240099575
+  vertex alpha = R0tail e_35: minorant 0.119242762250
+  vertex alpha = R0tail e_36: minorant 0.119203856949
+  vertex alpha = R0tail e_40: minorant 0.119211579908
+  vertex alpha = R0tail e_42: minorant 0.119222507186
+  vertex alpha = R0tail e_44: minorant 0.119220710261
+  vertex alpha = R0tail e_45: minorant 0.119235718535
+  vertex alpha = R0tail e_55: minorant 0.119242630715
+  vertex alpha = R0tail e_56: minorant 0.119217009971
+  vertex alpha = R0tail e_60: minorant 0.119198297824
+  vertex alpha = R0tail e_63: minorant 0.119238536258
+  vertex alpha = R0tail e_66: minorant 0.119222635154
+  vertex alpha = R0tail e_70: minorant 0.119226556458
+  vertex alpha = R0tail e_72: minorant 0.119199619198
+  vertex alpha = R0tail e_77: minorant 0.119244778284
+  vertex alpha = R0tail e_84: minorant 0.119205056658
+  vertex alpha = R0tail e_88: minorant 0.119217682818
+  vertex alpha = R0tail e_90: minorant 0.119213864078
+  vertex alpha = R0tail e_99: minorant 0.119238401603
+  vertex alpha = R0tail e_105: minorant 0.119236370623
+  vertex alpha = R0tail e_110: minorant 0.119226656553
+  vertex alpha = R0tail e_120: minorant 0.119193683764
+  vertex alpha = R0tail e_126: minorant 0.119219197790
+  vertex alpha = R0tail e_132: minorant 0.119205891821
+  vertex alpha = R0tail e_140: minorant 0.119211802521
+  vertex alpha = R0tail e_154: minorant 0.119230688887
+  vertex alpha = R0tail e_165: minorant 0.119236239919
+  vertex alpha = R0tail e_168: minorant 0.119200900703
+  vertex alpha = R0tail e_180: minorant 0.119192686404
+  vertex alpha = R0tail e_198: minorant 0.119219342534
+  vertex alpha = R0tail e_210: minorant 0.119215065973
+  vertex alpha = R0tail e_220: minorant 0.119212550544
+  vertex alpha = R0tail e_231: minorant 0.119238993788
+  vertex alpha = R0tail e_252: minorant 0.119199998922
+  vertex alpha = R0tail e_264: minorant 0.119201788829
+  vertex alpha = R0tail e_280: minorant 0.119208190898
+  vertex alpha = R0tail e_308: minorant 0.119217879091
+  vertex alpha = R0tail e_315: minorant 0.119234383968
+  vertex alpha = R0tail e_330: minorant 0.119215227823
+  vertex alpha = R0tail e_360: minorant 0.119187698388
+  vertex alpha = R0tail e_385: minorant 0.119241634773
+  vertex alpha = R0tail e_396: minorant 0.119200901104
+  vertex alpha = R0tail e_420: minorant 0.119194094703
+  vertex alpha = R0tail e_440: minorant 0.119208985306
+  vertex alpha = R0tail e_462: minorant 0.119220423579
+  vertex alpha = R0tail e_495: minorant 0.119234261069
+  vertex alpha = R0tail e_504: minorant 0.119195505643
+  vertex alpha = R0tail e_616: minorant 0.119214668312
+  vertex alpha = R0tail e_630: minorant 0.119211194943
+  vertex alpha = R0tail e_660: minorant 0.119195080563
+  vertex alpha = R0tail e_693: minorant 0.119237209980
+  vertex alpha = R0tail e_770: minorant 0.119224664666
+  vertex alpha = R0tail e_792: minorant 0.119196465360
+  vertex alpha = R0tail e_840: minorant 0.119189202507
+  vertex alpha = R0tail e_924: minorant 0.119202153485
+  vertex alpha = R0tail e_990: minorant 0.119211377062
+  vertex alpha = R0tail e_1155: minorant 0.119234942599
+  vertex alpha = R0tail e_1260: minorant 0.119188142320
+  vertex alpha = R0tail e_1320: minorant 0.119190250530
+  vertex alpha = R0tail e_1386: minorant 0.119216959287
+  vertex alpha = R0tail e_1540: minorant 0.119209216465
+  vertex alpha = R0tail e_1848: minorant 0.119197802913
+  vertex alpha = R0tail e_1980: minorant 0.119189207076
+  vertex alpha = R0tail e_2310: minorant 0.119212633180
+  vertex alpha = R0tail e_2520: minorant 0.119182853459
+  vertex alpha = R0tail e_2772: minorant 0.119196859022
+  vertex alpha = R0tail e_3080: minorant 0.119205435312
+  vertex alpha = R0tail e_3465: minorant 0.119232863017
+  vertex alpha = R0tail e_3960: minorant 0.119183985741
+  vertex alpha = R0tail e_4620: minorant 0.119190677287
+  vertex alpha = R0tail e_5544: minorant 0.119192155412
+  vertex alpha = R0tail e_6930: minorant 0.119208580956
+  vertex alpha = R0tail e_9240: minorant 0.119185555729
+  vertex alpha = R0tail e_13860: minorant 0.119184446364
+  vertex alpha = R0tail e_27720: minorant 0.119178909685
+[4f] minorant minimized over the 97 vertices of the tail simplex: minimum at g = 27720 (2118s)
+CERTIFIED: lower density of {p + 2^a} >= 0.119178910
+rounded down: 0.119178
+PASS: certified bound >= claim 0.119178
+2118.71 s 876756 KB maxrss
+rc=0 wall=2118s

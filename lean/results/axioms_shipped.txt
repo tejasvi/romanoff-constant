@@ -1,0 +1,82 @@
+def Romanoff.IsRomanoff : ℕ → Prop :=
+fun n => ∃ p a, Nat.Prime p ∧ 1 ≤ a ∧ n = p + 2 ^ a
+def Romanoff.count : ℕ → ℕ :=
+fun N => (Finset.filter Romanoff.IsRomanoff (Finset.Icc 1 N)).card
+def Romanoff.dens : ℕ → ℝ :=
+fun N => ↑(Romanoff.count N) / ↑N
+def Romanoff.U2Statement : Prop :=
+109406 / 1000000 ≤ Filter.liminf Romanoff.dens Filter.atTop
+def Romanoff.V3Statement : Prop :=
+117953 / 1000000 ≤ Filter.liminf Romanoff.dens Filter.atTop
+def Romanoff.ESP28 : ℕ → Prop :=
+fun l =>
+  ∀ ε > 0,
+    ∃ N₀,
+      ∀ N ≥ N₀,
+        ∀ (h : ℤ),
+          0 < h →
+            h < ↑N →
+              ∀ (k : ℕ),
+                k.Coprime l →
+                  ↑(Romanoff.pairCountMod N h k l) ≤
+                    (8 + ε) * Romanoff.C0up * ↑N / (↑l.totient * Real.log ↑N ^ 2) * Romanoff.sing (l * h.natAbs)
+def Romanoff.JTProp2 : Prop :=
+∀ ε > 0,
+  ∃ N₁,
+    ∀ N ≥ N₁,
+      ∀ (h : ℤ),
+        0 < h →
+          h < ↑N →
+            ↑(Romanoff.pairCount N h) ≤
+              (67814 / 10000 + ε) * Romanoff.C0up * ↑N / Real.log ↑N ^ 2 * Romanoff.sing h.natAbs
+def Romanoff.PNTAP : ℕ → Prop :=
+fun l =>
+  ∀ (a : ℕ),
+    a.Coprime l →
+      Filter.Tendsto (fun N => ↑(Romanoff.primeCountMod N l a) * ↑l.totient * Real.log ↑N / ↑N) Filter.atTop (nhds 1)
+def Romanoff.R0Bound : Prop :=
+∀ (S : Finset ℕ), (∀ m ∈ S, Odd m ∧ Squarefree m) → ∑ m ∈ S, Romanoff.fm m / ↑(orderOf 2) ≤ 193656 / 100000
+def Romanoff.ellPrimes : List ℕ :=
+[3, 5, 7, 11, 13, 17, 31, 41, 241]
+Romanoff.lowerDensityGe_iff : ∀ (c : ℝ), Romanoff.LowerDensityGe c ↔ c ≤ Filter.liminf Romanoff.dens Filter.atTop
+Romanoff.romanoff_U2 : Romanoff.ESP28 Romanoff.ell →
+  Romanoff.PNTAP Romanoff.ell → Romanoff.R0Bound → Romanoff.U2Statement
+Romanoff.romanoff_v3 : Romanoff.ESP28 Romanoff.ell →
+  Romanoff.JTProp2 → Romanoff.PNTAP Romanoff.ell → Romanoff.R0Bound → Romanoff.V3Statement
+Romanoff.lagR_le_liminf : Romanoff.XUESPBound →
+  Romanoff.SumXUJTBound →
+    Romanoff.OrbSumLink →
+      Romanoff.NcQLink →
+        Romanoff.LagBoundSplit →
+          Romanoff.DataFacts →
+            Romanoff.LimitFacts →
+              ∀ {teff : List ℚ},
+                Romanoff.TBound teff →
+                  ∀ (c1 mu : ℚ),
+                    0 ≤ ↑mu →
+                      Romanoff.ESP28 Romanoff.ell →
+                        Romanoff.PNTAP Romanoff.ell →
+                          Romanoff.R0Bound →
+                            mu = 0 ∨ Romanoff.JTProp2 ∧ ↑c1 = Romanoff.C1R →
+                              Romanoff.lagR teff c1 mu ≤ Filter.liminf Romanoff.dens Filter.atTop
+'Romanoff.romanoff_U2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ R45.M3.certOK_data._native.native_decide.ax_1_1,
+ R45.M3.sumsOK_data._native.native_decide.ax_1_1,
+ R45.M3.teffD_eq._native.native_decide.ax_1_1,
+ R45.P45.cert_U2_lit._native.native_decide.ax_1_1]
+'Romanoff.romanoff_v3' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ R45.M3.certOK_data._native.native_decide.ax_1_1,
+ R45.M3.sumsOK_data._native.native_decide.ax_1_1,
+ R45.M3.teffD_eq._native.native_decide.ax_1_1,
+ R45.P45.cert_v3_lit._native.native_decide.ax_1_1]
+'Romanoff.lagR_le_liminf' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Romanoff.M3.tboundLit' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ R45.M3.certOK_data._native.native_decide.ax_1_1,
+ R45.M3.sumsOK_data._native.native_decide.ax_1_1,
+ R45.M3.teffD_eq._native.native_decide.ax_1_1]

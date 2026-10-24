@@ -1,0 +1,8 @@
+[0] params: ELL=[3, 5, 7, 11, 13, 17, 31, 241, 41, 19, 73] CAP=8 C1=8 C0_up=33008090792343479/50000000000000000 log2 in [693147180559945309/1000000000000000000, 69314718055994531/100000000000000000] R0_up=24207/12500 tail_mode=alpha_simplex LMAX=3000000 FACBIG=yes, T1=1200
+[1] factorizations verified to T0=300: 721 primes (0s)
+[2b] class (b): 3231 proven primes, orders 301..1200; T_b(0) <= 5.377e-03; R0_b >= 0.001132202 (743s)
+[2] divisor form: T_up(0) <= 1.140760318  tail mass <= 1.9583e-04 (743s)
+[0e] UNCONDITIONAL: budget rows dropped (mu = 0)
+[3e] BASE [3, 5, 7, 11, 13, 17, 31, 241]: PER0 120, patterns 859201, orbits 7870; ADD [41, 19, 73] (orders [20, 18, 9]; last 73); PER 360 (769s)
+FAIL: check failed: alpha_j lies outside the tail simplex (mass above R0tail)
+rc=1 wall=771s

@@ -1,0 +1,57 @@
+name = "LeanRomanoff"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["GK"]
+
+[leanOptions]
+pp.unicode.fun = true
+relaxedAutoImplicit = false
+autoImplicit = false
+weak.linter.style.header = false
+
+# Toolchain leanprover/lean4:v4.35.0-rc3; Mathlib at tag v4.35.0-rc3 (commit c55e6e786f49, see lake-manifest.json).
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.35.0-rc3"
+
+# The modules of this directory: GK.FinalK and its import closure, the axiom checks and the generators (README.md).
+# No library is precompiled: no module runs compiled code during elaboration, and every check is `decide +kernel`.
+# The default target GK builds the whole proof, including the 7,871 key modules GK/Keys/ (README.md, "Build").
+[[lean_lib]]
+name = "Romanoff"
+globs = ["Romanoff.+"]
+
+[[lean_lib]]
+name = "RCert"
+globs = ["RCert.+"]
+
+[[lean_lib]]
+name = "K45"
+globs = ["K45.+"]
+
+[[lean_lib]]
+name = "K45G"
+globs = ["K45G.+"]
+
+[[lean_lib]]
+name = "GK"
+globs = ["GK.+"]
+
+# Generators of the key modules (gkkeys), of the chunk modules (gkglue3) and of the stage-1 literal tables (m3ggenlit),
+# and the compiled cross-check of the evaluators (gktest, not part of the proof).
+[[lean_exe]]
+name = "gkkeys"
+root = "GK.GenKeys"
+
+[[lean_exe]]
+name = "gkglue3"
+root = "GK.GenGlue3"
+
+[[lean_exe]]
+name = "m3ggenlit"
+root = "RCert.M3G.GenLit"
+
+[[lean_exe]]
+name = "gktest"
+root = "GK.Test"

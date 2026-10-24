@@ -1,0 +1,14 @@
+Romanoff.romanoff_U2_K : Romanoff.ESP28 Romanoff.ell →
+  Romanoff.PNTAP Romanoff.ell → Romanoff.R0Bound → Romanoff.U2Statement
+Romanoff.romanoff_v3_K : Romanoff.ESP28 Romanoff.ell →
+  Romanoff.JTProp2 → Romanoff.PNTAP Romanoff.ell → Romanoff.R0Bound → Romanoff.V3Statement
+def Romanoff.U2Statement : Prop :=
+109406 / 1000000 ≤ Filter.liminf Romanoff.dens Filter.atTop
+def Romanoff.V3Statement : Prop :=
+117953 / 1000000 ≤ Filter.liminf Romanoff.dens Filter.atTop
+'Romanoff.romanoff_U2_K' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Romanoff.romanoff_v3_K' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Romanoff.cert_U2_K' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Romanoff.cert_v3_K' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Romanoff.M3.tboundLitK' depends on axioms: [propext, Classical.choice, Quot.sound]
+'K45.orbits_eq' depends on axioms: [propext, Classical.choice, Quot.sound]

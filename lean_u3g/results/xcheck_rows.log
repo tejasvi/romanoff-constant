@@ -1,0 +1,8 @@
+Y popcount 0; checked 114 rows over 38 patterns; mismatches 0
+PASS
+Y popcount 228; checked 114 rows over 38 patterns; mismatches 0
+PASS
+Y popcount 156; checked 114 rows over 38 patterns; mismatches 0
+PASS
+Y popcount 255; checked 114 rows over 38 patterns; mismatches 0
+PASS

@@ -1,0 +1,389 @@
+1c1,26
+< """Exact checker u3e for the Romanov (Tao page 45a) lower bound: rel2 (check_r45a5_rel2_3cf71761.py) plus formats r45a-u3,
+---
+> """Exact checker u3f for the Romanov (Tao page 45a) lower bound: u3e v5 (check_r45u3e.py 7e8e7170) plus format r45a-u3f.
+> Usage: check_r45u3f.py FAC.json CERT.json [LMAX] [FACBIG.json T1] [--claim X] [--workers N] [--time-sample K]
+> 
+> r45a-u3f = r45a-u3e with INDEPENDENT CRT COMPONENTS.  The certificate lists primes IND.  Each added prime p is either a core
+> prime (gcd(o_p, prod IND) = 1) or belongs to exactly one q in IND, with o_p = q m_p, gcd(m_p, q) = 1 and m_p | PERc, where
+> PERc = lcm of the orders of BASE and the core primes, q does not divide PERc, and PER = PERc * prod IND.  Write r <-> (x, y)
+> with x = r mod PERc and y = (r mod q)_q (CRT).  The BASE mask and the core exclusions depend on x only; the class j mod o_p of an
+> independent p is {r : x = a_p (mod m_p), y_q = b_p} with (a_p, b_p) = (j mod m_p, j mod q).  Hence
+>   1_U(x, y) = core(x) * prod_q F_q(x, y_q),   F_q(x, y) = prod_{p in P_q} (1 - [x = a_p (m_p)] [y = b_p]),
+> and for g = g_c * prod_q g_q (g_c | PERc, g_q in {1, q}), [g | r1 - r2] = [g_c | x1 - x2] prod_q [g_q | y1_q - y2_q], so
+>   S_g(U) = sum_{x1, x2} core(x1) core(x2) [g_c | x1 - x2] prod_q W_q^{g_q}(x1, x2),
+>   W_q^1(x1, x2) = f_q(x1) f_q(x2),  W_q^q(x1, x2) = q - |B_q(x1) u B_q(x2)|,  f_q(x) = q - |B_q(x)|,
+> where B_q(x) = {b_p : p in P_q, x = a_p (m_p)} is the set of excluded VALUES of y_q.  W depends on x only through x mod M,
+> M = lcm of all m_p, so S_g(U) = sum_{u, v mod M} W(u, v) T_{g_c}(u, v) with
+>   T_{g_c}(u, v) = #{(x1, x2) in core^2 : x1 = x2 (g_c), x1 = u (M), x2 = v (M)} = sum_{c mod g_c} N^L_{(c,u)} N^L_{(c,v)},
+> L = lcm(g_c, M) | PERc, N^L = class counts of the core mask mod L, (c, u) = the class mod L with x = c (g_c), x = u (M) (zero if
+> incompatible).  Also s = |U| = sum_u N^M_u prod_q f_q(u).  Symmetry: a permutation of Z/q acting on y_q maps the row of an
+> option tuple to the row of the permuted tuple and leaves s and every S_g unchanged ([q | y1 - y2] is permutation invariant).
+> So the options of P_q enter only through their PATTERN: for each p, "none" or the residue a_p mod m_p, and the partition of the
+> class options into blocks of equal b.  A pattern with k blocks stands for q (q-1) ... (q-k+1) option tuples, times the weights
+> (p - o_p for "none", 1 for a class).  The checker verifies that the pattern multiplicities add up to prod_{p in P_q} p.
+> Everything else (BASE orbits, rotation argument, core options, Pintz minorant, tail vertices, conditional mu) is r45a-u3e's,
+> except that the core options are enumerated explicitly (no last-prime trick).  --time-sample K evaluates K evenly spaced BASE
+> orbits, prints the time per orbit and exits WITHOUT certifying (pilots only).
+> 
+> Exact checker u3e for the Romanov (Tao page 45a) lower bound: rel2 (check_r45a5_rel2_3cf71761.py) plus formats r45a-u3,
+59c84
+< bounds in arb, residue patterns, orbits).  Usage: check_r45u3e.py FAC.json CERT.json [LMAX] [FACBIG.json T1] [--tails-out TAILS.json]
+---
+> bounds in arb, residue patterns, orbits).  Usage: check_r45u3f.py FAC.json CERT.json [LMAX] [FACBIG.json T1] [--tails-out TAILS.json]
+87c112
+< FMT = cert.get("format"); req(FMT in ("r45a-v2", "r45a-u3", "r45a-u3x", "r45a-u3e"), "unknown certificate format")
+---
+> FMT = cert.get("format"); req(FMT in ("r45a-v2", "r45a-u3", "r45a-u3x", "r45a-u3e", "r45a-u3f"), "unknown certificate format")
+90a116,120
+> U3F = FMT == "r45a-u3f"
+> DIVF = U3E or U3F                                   # per-divisor tail bounds
+> TSAMPLE = 0
+> if "--time-sample" in sys.argv:
+>     _i = sys.argv.index("--time-sample"); TSAMPLE = int(sys.argv[_i + 1]); del sys.argv[_i:_i + 2]
+168c198
+< if U3E:                                            # u3e: per-divisor upper bounds (no per-residue table)
+---
+> if DIVF:                                            # u3e: per-divisor upper bounds (no per-residue table)
+207c237
+<         if U3E:
+---
+>         if DIVF:
+213c243
+<     if U3E:
+---
+>     if DIVF:
+226c256
+<     log(f"[2b] class (b): {sum(len(v) for v in Mt.values())} proven primes, orders {T0+1}..{T1}; T_b(0) <= {float(sum(Tb_g.values()) + pruneb_up if U3E else Tb[0]):.3e}; R0_b >= {float(R0b_lo):.9f}")
+---
+>     log(f"[2b] class (b): {sum(len(v) for v in Mt.values())} proven primes, orders {T0+1}..{T1}; T_b(0) <= {float(sum(Tb_g.values()) + pruneb_up if DIVF else Tb[0]):.3e}; R0_b >= {float(R0b_lo):.9f}")
+228c258
+< if not U3E:
+---
+> if not DIVF:
+232c262
+< if U3E:
+---
+> if DIVF:
+376a407,727
+>         f"{'alpha = 0' if gmin is None else 'g = ' + str(divs[gmin])}")
+>     print(f"CERTIFIED: lower density of {{p + 2^a}} >= {float(B):.9f}")
+>     print(f"rounded down: {math.floor(B * 10**6) / 10**6:.6f}")
+>     if CLAIM is not None:
+>         _c = Fr(CLAIM)
+>         if B >= _c:
+>             print(f"PASS: certified bound >= claim {CLAIM}"); sys.exit(0)
+>         print(f"FAIL: certified bound {float(B):.9f} < claim {CLAIM}"); sys.exit(1)
+>     sys.exit(0)
+> 
+> if U3F:
+>     import numpy as np, itertools
+>     from multiprocessing import get_context
+>     req(cert.get("tail_mode") == "alpha_simplex", "r45a-u3f certificates use tail_mode alpha_simplex")
+>     req(not cert.get("duals"), "r45a-u3f certificates carry no per-c budget multipliers")
+>     MU = Fr(cert.get("mu", "0"))
+>     req(MU >= 0, "mu must be >= 0")
+>     print(f"[0f] {'CONDITIONAL on (I2): uniform budget multiplier mu = ' + str(MU) + ', budget constant C1 = ' + str(C1) if MU > 0 else 'UNCONDITIONAL: budget rows dropped (mu = 0)'}", flush=True)
+>     ADD = [int(p) for p in cert["ADD"]]
+>     IND = [int(q) for q in cert["IND"]]
+>     req(len(ADD) >= 1 and len(ADD) == len(set(ADD)) and all(p in ELL for p in ADD), "ADD must be distinct primes of ELL")
+>     req(len(IND) >= 1 and len(IND) == len(set(IND)) and all(q > 1 and fmpz(q).is_prime() for q in IND), "IND must be distinct primes")
+>     BASE = [p for p in ELL if p not in ADD]
+>     req(len(BASE) >= 1, "BASE must be nonempty")
+>     qprod = 1
+>     for q in IND: qprod *= q
+>     ADDC = [p for p in ADD if math.gcd(ordm[p], qprod) == 1]
+>     ADDI = {q: [p for p in ADD if ordm[p] % q == 0] for q in IND}
+>     for p in ADD:
+>         req((p in ADDC) + sum(p in ADDI[q] for q in IND) == 1, ("added prime must be core or in exactly one IND component", p))
+>     def lcmlist(xs):
+>         L = 1
+>         for x_ in xs: L = L * x_ // math.gcd(L, x_)
+>         return L
+>     PER0 = lcmlist([ordm[p] for p in BASE])
+>     PERc = lcmlist([ordm[p] for p in BASE + ADDC])
+>     MP = {}
+>     for q in IND:
+>         req(PERc % q != 0, ("IND prime divides the core period", q))
+>         req(len(ADDI[q]) >= 1, ("IND prime without added primes", q))
+>         for p in ADDI[q]:
+>             m_ = ordm[p] // q
+>             req(m_ * q == ordm[p] and m_ % q != 0 and PERc % m_ == 0, ("o_p must be q m_p with m_p | PERc", p))
+>             MP[p] = m_
+>     req(PER == PERc * qprod, "PER must equal PERc * prod IND")
+>     ell0 = 1
+>     for p in BASE: ell0 *= p
+>     FULL0 = (1 << PER0) - 1
+>     pat = {0: 1}
+>     for p in BASE:
+>         o = ordm[p]; pw = {pow(2, r, p): r for r in range(o)}; opts = {}
+>         for k in range(p):
+>             m = 0
+>             if k in pw:
+>                 for r in range(pw[k], PER0, o): m |= 1 << r
+>             opts[m] = opts.get(m, 0) + 1
+>         new = {}
+>         for ex, cnt in pat.items():
+>             for m, c in opts.items(): new[ex | m] = new.get(ex | m, 0) + cnt * c
+>         pat = new
+>     req(sum(pat.values()) == ell0)
+>     def canon0(m):
+>         best = m; x = m
+>         for _s in range(1, PER0):
+>             x = ((x << 1) | (x >> (PER0 - 1))) & FULL0
+>             if x < best: best = x
+>         return best
+>     orb = {}
+>     for ex, cnt in pat.items():
+>         m = FULL0 & ~ex
+>         if m: k = canon0(m); orb[k] = orb.get(k, 0) + cnt
+>     req(cert["n_base_orbits"] == len(orb))
+>     divs = [g for g in range(1, PER + 1) if PER % g == 0]
+>     divsc = [g for g in range(1, PERc + 1) if PERc % g == 0]
+>     log(f"[3f] BASE {BASE}: PER0 {PER0}, orbits {len(orb)}; core ADD {ADDC} (PERc {PERc}); independent "
+>         + "; ".join(f"q={q}: {[(p, MP[p]) for p in ADDI[q]]}" for q in IND) + f"; PER {PER}")
+>     aj = {}
+>     for gs, fs in cert["alpha_j"].items():
+>         g = int(gs); f = Fr(fs)
+>         req(g in divs, ("alpha_j: g must divide PER", g)); req(f >= 0, ("alpha_j: negative weight", g))
+>         aj[g] = aj.get(g, Fr(0)) + f * R0tail
+>     req(sum(aj.values(), Fr(0)) <= R0tail, "alpha_j lies outside the tail simplex (mass above R0tail)")
+>     Pell = Fr(1)
+>     for p in ELL: Pell *= Fr(p - 1, p - 2)
+>     kap = C0up * Pell / (PER * log2lo)
+>     norm = Fr(ell, phil) / (PER * log2hi)
+>     req(all(g in divs for g in Ta_g) and all(g in divs for g in Tb_g))
+>     Bg = {g: Ta_g.get(g, Fr(0)) + Tb_g.get(g, Fr(0)) for g in divs}
+>     Bg[1] += prune_up + pruneb_up
+>     req(all(v >= 0 for v in Bg.values()))
+>     E = 48
+>     Bn = [-((-Bg[g].numerator * 2 ** E) // Bg[g].denominator) for g in divs]
+>     req(all(Fr(b, 2 ** E) >= Bg[g] for b, g in zip(Bn, divs)))
+>     Bhi = [b >> 24 for b in Bn]; Blo = [b & ((1 << 24) - 1) for b in Bn]
+>     req(sum(Bhi) * PER * PER < 2 ** 63 and sum(Blo) * PER * PER < 2 ** 63, "int64 bound for Q")
+>     req(PER * PER < 2 ** 32, "S_g <= PER^2 < 2^32 (group-sum columns)")
+>     # patterns of each independent component
+>     Mq = {q: lcmlist([MP[p] for p in ADDI[q]]) for q in IND}
+>     M = lcmlist(list(Mq.values()))
+>     req(PERc % M == 0)
+>     def set_partitions(items):
+>         if not items:
+>             yield []
+>             return
+>         first, rest = items[0], items[1:]
+>         for part in set_partitions(rest):
+>             for i in range(len(part)):
+>                 yield part[:i] + [[first] + part[i]] + part[i + 1:]
+>             yield [[first]] + part
+>     PATS = {}
+>     for q in IND:
+>         Pq = ADDI[q]; lst = []; tot = 0
+>         for choice in itertools.product(*[[None] + list(range(MP[p])) for p in Pq]):
+>             cls = [p for p, a in zip(Pq, choice) if a is not None]
+>             amap = {p: a for p, a in zip(Pq, choice) if a is not None}
+>             wnone = 1
+>             for p, a in zip(Pq, choice):
+>                 if a is None: wnone *= p - ordm[p]
+>             for part in set_partitions(cls):
+>                 k = len(part)
+>                 ff = 1
+>                 for i in range(k): ff *= q - i
+>                 mult = wnone * ff
+>                 if mult == 0: continue
+>                 excl = [set(bi for bi, blk in enumerate(part) if any(u % MP[p] == amap[p] for p in blk)) for u in range(M)]
+>                 f = [q - len(excl[u]) for u in range(M)]
+>                 W1 = [[f[u] * f[v] for v in range(M)] for u in range(M)]
+>                 Wq = [[q - len(excl[u] | excl[v]) for v in range(M)] for u in range(M)]
+>                 lst.append((mult, f, W1, Wq))
+>                 tot += mult
+>         prodp = 1
+>         for p in Pq: prodp *= p
+>         req(tot == prodp, ("pattern multiplicities must add up to prod p", q, tot, prodp))
+>         PATS[q] = lst
+>     # combined patterns, and the divisor map g = g_c * prod_q g_q
+>     combos = list(itertools.product(*[range(len(PATS[q])) for q in IND]))
+>     gsel = list(itertools.product(*[[False, True] for q in IND]))
+>     NP, NG = len(combos), len(gsel)
+>     Wt = np.zeros((NP, NG, M, M), dtype=np.int64); Fm = np.zeros((NP, M), dtype=np.int64); multv = []
+>     for pi, cmb in enumerate(combos):
+>         mult = 1; fv = np.ones(M, dtype=np.int64)
+>         for q, ci in zip(IND, cmb):
+>             mult *= PATS[q][ci][0]; fv = fv * np.array(PATS[q][ci][1], dtype=np.int64)
+>         multv.append(mult); Fm[pi] = fv
+>         for gi, sel in enumerate(gsel):
+>             Wm = np.ones((M, M), dtype=np.int64)
+>             for q, ci, on in zip(IND, cmb, sel):
+>                 Wm = Wm * np.array(PATS[q][ci][3] if on else PATS[q][ci][2], dtype=np.int64)
+>             Wt[pi, gi] = Wm
+>     gidx = np.zeros((len(divsc), NG), dtype=np.int64)
+>     for ci_, gc in enumerate(divsc):
+>         for gi, sel in enumerate(gsel):
+>             g = gc
+>             for q, on in zip(IND, sel):
+>                 if on: g *= q
+>             gidx[ci_, gi] = divs.index(g)
+>     req(sorted(gidx.reshape(-1).tolist()) == list(range(len(divs))), "divisor map must be a bijection")
+>     _indp = 1
+>     for q in IND:
+>         for p in ADDI[q]: _indp *= p
+>     req(sum(multv) == _indp, "combined pattern multiplicities must add up to the product of the independent primes")
+>     # index maps for T_{g_c}: (u, c) -> class mod L = lcm(g_c, M), or -1 if incompatible
+>     TIDX = []
+>     for gc in divsc:
+>         L = gc * M // math.gcd(gc, M)
+>         idx = -np.ones((M, gc), dtype=np.int64)
+>         for x_ in range(L): idx[x_ % M, x_ % gc] = x_
+>         # v3: A_u[c] = 0 unless c = u (mod d), d = gcd(g_c, M); so T(u, v) = 0 unless u = v (mod d), and the sum runs over c = u (mod d)
+>         d_ = math.gcd(gc, M)
+>         cp_ = [(u, v, np.array([c for c in range(gc) if c % d_ == u % d_], dtype=np.int64))
+>                for u in range(M) for v in range(u, M) if (v - u) % d_ == 0]
+>         TIDX.append((gc, L, idx, cp_))
+>     def _spf(n):
+>         d_ = 2
+>         while n % d_: d_ += 1
+>         return d_
+>     HPLAN = []
+>     for h in sorted(divsc, reverse=True):
+>         if h != PERc:
+>             q_ = _spf(PERc // h); HPLAN.append((h, h * q_, q_))
+>     # v2: S is kept in the natural column order k = ci * NG + gi (divisor divs[col_div[k]]); coefficients are permuted once
+>     col_div = gidx.reshape(-1); inv_col = np.argsort(col_div)
+>     req(sorted(col_div.tolist()) == list(range(len(divs))))
+>     # v2: S = W . T is evaluated in float64 BLAS; exact because every operand is a nonnegative integer and every partial sum is
+>     # at most M^2 max(W) max(T) with T <= PERc^2, asserted < 2^53
+>     req(M * M * int(Wt.max()) * PERc * PERc < 2 ** 53, "float64 exactness bound for S = W . T")
+>     # v3: exact float64 group sums: every summand W_core * S <= wmax PER^2 (S <= PER^2, s <= PER), at most CH rows per sum
+>     wmax = 1
+>     for p in ADDC: wmax *= max(p - ordm[p], 1)
+>     CH = max(1, min((1 << 24) // (NP * len(divs)), (2 ** 53 - 1) // (wmax * PER * PER)))
+>     req(CH * wmax * PER * PER < 2 ** 53, "float64 exactness bound for the group sums")
+>     Bn_nat = [Bn[int(i)] for i in col_div]
+>     Bf = np.array([float(Fr(b, 2 ** E)) for b in Bn_nat])                     # J selection only
+>     Wt4 = Wt.astype(np.float64)                                                 # (NP, NG, M, M)
+>     Zf = np.einsum('cg,pguv->pcuv', Bf.reshape(len(divsc), NG), Wt4).reshape(NP, len(divsc) * M * M).T.copy()
+>     GL = dict(PERc=PERc, PER0=PER0, ADDC=[(p, ordm[p]) for p in ADDC], divs=divs, divsc=divsc, M=M, NP=NP, NG=NG,
+>               Wt=Wt.reshape(NP * NG, M * M).T.astype(np.float64).copy(), Fm=Fm.T.copy(), mult=np.array(multv, dtype=np.int64),
+>               TIDX=TIDX, HPLAN=HPLAN, Zf=Zf, multp=[int(m_) for m_ in multv],
+>               Bhi=np.array(Bhi, dtype=np.int64)[col_div], Blo=np.array(Blo, dtype=np.int64)[col_div],
+>               capk=float(CAP * kap), ajf=[(int(inv_col[divs.index(g)]), g, float(a)) for g, a in aj.items()], E=E, CH=CH,
+>               PER2=PER * PER)
+>     log(f"[3f] v3 patterns: " + ", ".join(f"q={q}: {len(PATS[q])}" for q in IND) + f"; combined {NP}; M {M}; divisors {len(divs)} "
+>         f"(core {len(divsc)}); core-row chunk {CH}")
+>     def gsum(Wg, Mg):
+>         """exact sum of Wg[i] * Mg[i, :] as Python ints: int64 batches with bound n * max(W) * max(M) < 2^63"""
+>         mw = int(Wg.max()); mm = int(Mg.max())
+>         if mw == 0 or mm == 0: return [0] * Mg.shape[1]
+>         bs = max(1, (2 ** 63 - 1) // (mw * mm))
+>         tot = [0] * Mg.shape[1]
+>         for i in range(0, len(Wg), bs):
+>             part = Wg[i:i + bs] @ Mg[i:i + bs]
+>             for k_ in range(len(tot)): tot[k_] += int(part[k_])
+>         return tot
+>     def orbit_sums_f(item):
+>         rep_, cnt_ = item
+>         Pc, P0, Mm = GL["PERc"], GL["PER0"], GL["M"]
+>         base = np.array([(rep_ >> r) & 1 for r in range(P0)], dtype=np.int8)
+>         rows = [np.tile(base, Pc // P0)]; wts = [1]
+>         for p, o in GL["ADDC"]:
+>             nr, nw = [], []
+>             for X, w in zip(rows, wts):
+>                 nr.append(X); nw.append(w * (p - o))
+>                 for j in range(o):
+>                     Y = X.copy(); Y[j::o] = 0; nr.append(Y); nw.append(w)
+>             rows, wts = nr, nw
+>         tw = int(sum(wts))
+>         out = {}
+>         nd = len(GL["divs"]); ndc = len(GL["divsc"]); NPl, NGl = GL["NP"], GL["NG"]
+>         for c0 in range(0, len(wts), GL["CH"]):
+>             X = np.array(rows[c0:c0 + GL["CH"]], dtype=np.int32); W = np.array(wts[c0:c0 + GL["CH"]], dtype=np.int64)
+>             n1 = len(W)
+>             N = {Pc: X}
+>             for h, H, q_ in GL["HPLAN"]:
+>                 N[h] = N[H].reshape(n1, q_, h).sum(axis=1, dtype=np.int32)
+>             T = np.zeros((n1, ndc, Mm * Mm), dtype=np.float64)
+>             for ci_, (gc, L, idx, cp_) in enumerate(GL["TIDX"]):
+>                 NL = N[L].astype(np.int64)
+>                 A = np.where(idx[None, :, :] >= 0, NL[:, np.maximum(idx, 0)], 0)          # (n1, M, g_c), int64
+>                 for u, v, cols in cp_:
+>                     t_ = (A[:, u, cols] * A[:, v, cols]).sum(axis=1)                         # exact int64
+>                     T[:, ci_, u * Mm + v] = t_; T[:, ci_, v * Mm + u] = t_
+>             Sf = (T.reshape(n1 * ndc, Mm * Mm) @ GL["Wt"]).reshape(n1, ndc, NPl, NGl)       # float64, exact (bound asserted)
+>             Qf = T.reshape(n1, ndc * Mm * Mm) @ GL["Zf"]                                    # (n1, NP), float: Pintz index only
+>             s = N[Mm].astype(np.int64) @ GL["Fm"]                                            # (n1, NP), exact
+>             tail = np.zeros((n1, NPl))
+>             for k_, g, a in GL["ajf"]: tail += g * a * Sf[:, k_ // NGl, :, k_ % NGl]
+>             J = np.floor(1 + GL["capk"] * (Qf + tail) / np.maximum(s, 1)).astype(np.int64)
+>             assert (s >= 0).all() and float(Sf.min()) >= 0
+>             assert n1 * int(W.max()) * GL["PER2"] < 2 ** 53, "float64 exactness bound (chunk)"
+>             Wc = W.astype(np.float64); jmin = int(J.min()); G_ = int(J.max()) - jmin + 1
+>             XP = np.empty((n1, 1 + nd)); E1 = np.zeros((G_, n1)); ar = np.arange(n1)
+>             for P in range(NPl):
+>                 XP[:, 0] = Wc * s[:, P]
+>                 XP[:, 1:] = (Wc[:, None, None] * Sf[:, :, P, :]).reshape(n1, nd)
+>                 E1[:] = 0.0; E1[J[:, P] - jmin, ar] = 1.0
+>                 sums = E1 @ XP                                                              # exact: all partial sums < 2^53
+>                 mP = GL["multp"][P]
+>                 for gi_ in np.flatnonzero(E1.sum(axis=1) > 0):
+>                     j = jmin + int(gi_)
+>                     vec = sums[gi_].astype(np.int64).astype(object) * mP
+>                     if j in out: out[j] += vec
+>                     else: out[j] = vec
+>         return cnt_, tw, out
+>     items = list(orb.items())
+>     if TSAMPLE:
+>         step = max(1, len(items) // TSAMPLE)
+>         samp = items[::step][:TSAMPLE]
+>         t0_ = time.time()
+>         with get_context("fork").Pool(WORKERS) as pool:
+>             for _ in pool.imap_unordered(orbit_sums_f, samp, chunksize=1): pass
+>         dt = time.time() - t0_
+>         print(f"TIMING ONLY (NOT A CERTIFICATE): {len(samp)} of {len(items)} BASE orbits in {dt:.1f} s with {WORKERS} workers "
+>               f"-> {dt / len(samp) * WORKERS:.2f} worker-s per orbit; full run ~ {dt / len(samp) * len(items) / 3600:.2f} h at "
+>               f"{WORKERS} workers", flush=True)
+>         sys.exit(3)
+>     A1, QJ, SJ = {}, {}, {}
+>     totw = 0
+>     with get_context("fork").Pool(WORKERS) as pool:
+>         for cnt_, tw, out in pool.imap_unordered(orbit_sums_f, items, chunksize=2):
+>             totw += cnt_ * tw
+>             for j, vec in out.items():
+>                 req(j >= 1)
+>                 A1[j] = A1.get(j, 0) + cnt_ * int(vec[0])
+>                 v = SJ.setdefault(j, [0] * len(divs))
+>                 for i in range(len(divs)): v[i] += cnt_ * int(vec[1 + i])
+>     for j in SJ:                                       # v3: exact Q sums from the exact S sums (natural order), then reorder
+>         QJ[j] = sum(Bn_nat[k] * SJ[j][k] for k in range(len(divs)))
+>         v_ = SJ[j]; SJ[j] = [v_[int(inv_col[i])] for i in range(len(divs))]
+>     addcprod = 1
+>     for p in ADDC: addcprod *= p
+>     indprod = 1
+>     for q in IND:
+>         for p in ADDI[q]: indprod *= p
+>     req(totw == sum(orb.values()) * addcprod and ell == ell0 * addcprod * indprod)
+>     log(f"[3f] rows evaluated: Pintz indices j in [{min(A1)}, {max(A1)}], {len(A1)} groups")
+>     NH = {}
+>     for j in A1:
+>         nu = max(Fr(0), norm / (j * (j + 1)) - MU)
+>         req(MU + nu > 0)
+>         hbest = None; i = 1
+>         while True:
+>             v = norm / i + (MU + nu) * (i - 1)
+>             if hbest is not None and v > hbest: break
+>             if hbest is None or v < hbest: hbest = v
+>             i += 1
+>             req(i < 10 ** 7)
+>         NH[j] = (nu, hbest)
+>     def vertex(gi):
+>         tot = Fr(0)
+>         for j in A1:
+>             nu, h = NH[j]
+>             Qj = Fr(QJ[j], 2 ** E)
+>             if gi is not None: Qj += divs[gi] * R0tail * SJ[j][gi]
+>             tot += h * A1[j] - (nu * CAP + MU * C1) * kap * Qj
+>         return tot / ell
+>     vals = {None: vertex(None)}
+>     for gi in range(len(divs)): vals[gi] = vertex(gi)
+>     for gi, v in vals.items():
+>         print(f"  vertex {'alpha = 0' if gi is None else 'alpha = R0tail e_' + str(divs[gi])}: minorant {float(v):.12f}", flush=True)
+>     gmin = min(vals, key=lambda k: vals[k]); B = vals[gmin]
+>     log(f"[4f] minorant minimized over the {len(vals)} vertices of the tail simplex: minimum at "

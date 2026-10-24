@@ -1,0 +1,33 @@
+[0] params: ELL=[3, 5, 7, 13, 43, 29, 127, 23] CAP=8 C1=8 C0_up=33008090792343479/50000000000000000 log2 in [693147180559945309/1000000000000000000, 69314718055994531/100000000000000000] R0_up=24207/12500 tail_mode=alpha_simplex LMAX=3000000 FACBIG=no
+[1] factorizations verified to T0=300: 721 primes (0s)
+[2] divisor form: T_up(0) <= 1.209877030  tail mass <= 1.3280e-03 (118s)
+[0e] UNCONDITIONAL: budget rows dropped (mu = 0)
+[3e] BASE [3, 5]: PER0 4, patterns 11, orbits 4; ADD [7, 13, 43, 29, 127, 23] (orders [3, 12, 14, 28, 7, 11]; last 23); PER 924 (118s)
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "<python3.12>/multiprocessing/pool.py", line 125, in worker
+    result = (True, func(*args, **kwds))
+                    ^^^^^^^^^^^^^^^^^^^
+  File "<python3.12>/multiprocessing/pool.py", line 48, in mapstar
+    return list(map(*args))
+           ^^^^^^^^^^^^^^^^
+  File "check_r45u3e.py", line 531, in orbit_sums_e
+    assert int(b - a) * int(Wg.max()) * 2 ** 32 < 2 ** 63, "int64 bound for the group sums"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: int64 bound for the group sums
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "check_r45u3e.py", line 542, in <module>
+    for cnt_, tw, out in pool.imap_unordered(orbit_sums_e, items, chunksize=2):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<python3.12>/multiprocessing/pool.py", line 451, in <genexpr>
+    return (item for chunk in result for item in chunk)
+                              ^^^^^^
+  File "<python3.12>/multiprocessing/pool.py", line 873, in next
+    raise value
+AssertionError: int64 bound for the group sums
+rc=1

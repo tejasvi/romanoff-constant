@@ -1,0 +1,39 @@
+{
+ "format": "r45a-u3e",
+ "tail_mode": "alpha_simplex",
+ "params": {
+  "ELL": [
+   3,
+   5,
+   7,
+   11,
+   13,
+   17,
+   31,
+   241,
+   41,
+   19,
+   73,
+   37
+  ],
+  "CAP": "8",
+  "C1": "8",
+  "C0_up": "66016181584686958/100000000000000000",
+  "log2_low": "693147180559945309/1000000000000000000",
+  "log2_up": "693147180559945310/1000000000000000000",
+  "R0_up": "193656/100000",
+  "note": "UNCONDITIONAL: (I2) unused; budget rows dropped; C1 = CAP does not enter the bound."
+ },
+ "PER": 360,
+ "alpha_j": {
+  "360": "1"
+ },
+ "note": "U3d: BASE (period 120) + ADD [41, 19, 73, 37] (period 360; 37 last), divisor form.",
+ "ADD": [
+  41,
+  19,
+  73,
+  37
+ ],
+ "n_base_orbits": 7870
+}

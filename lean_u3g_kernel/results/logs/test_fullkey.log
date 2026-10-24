@@ -1,0 +1,4 @@
+keys 7871
+key 0 x=0 cnt=203112 same=true fib_ms=343 native_ms=12027
+key 7870 x=1329227995784915872903807060280344575 cnt=16368 same=true fib_ms=287 native_ms=10473
+SUMMARY ok=2 bad=0

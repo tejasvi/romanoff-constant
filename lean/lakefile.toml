@@ -1,0 +1,28 @@
+name = "LeanRomanoff"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["Romanoff", "RCert"]
+
+[leanOptions]
+pp.unicode.fun = true
+relaxedAutoImplicit = false
+autoImplicit = false
+weak.linter.style.header = false
+
+# Toolchain leanprover/lean4:v4.35.0-rc3; Mathlib at tag v4.35.0-rc3 (commit c55e6e786f49, see lake-manifest.json).
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.35.0-rc3"
+
+[[lean_lib]]
+name = "Romanoff"
+
+# Certificate checker and data (core Lean only), compiled to native code for native_decide.
+[[lean_lib]]
+name = "RCert"
+precompileModules = true
+
+[[lean_exe]]
+name = "r45"
+root = "RCert.Main45"

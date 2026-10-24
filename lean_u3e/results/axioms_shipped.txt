@@ -1,0 +1,13 @@
+Romanoff.E.romanoff_U3e : Romanoff.ESP28 Romanoff.E.ell →
+  Romanoff.PNTAP Romanoff.E.ell → Romanoff.R0Bound → Romanoff.E.U3eStatement
+def Romanoff.E.U3eStatement : Prop :=
+110449 / 1000000 ≤ Filter.liminf Romanoff.dens Filter.atTop
+'Romanoff.E.romanoff_U3e' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ R45.M3E.R0tD_eq._native.native_decide.ax_1_1,
+ R45.M3E.certOK_data._native.native_decide.ax_1_1,
+ R45.M3E.sumsOK_data._native.native_decide.ax_1_1,
+ R45.M3E.teffD_eq._native.native_decide.ax_1_1,
+ R45.U3E.tabB_BLit_eq._native.native_decide.ax_1_1,
+ Romanoff.E.S2.finalOK_true._native.native_decide.ax_1_1]

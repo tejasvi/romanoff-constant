@@ -1,0 +1,9 @@
+group 0 ( GK.Glue.C000 GK.Glue.C001 GK.Glue.C002 GK.Glue.C003 GK.Glue.C004 GK.Glue.C005 GK.Glue.C006 GK.Glue.C007) rc=137 secs=23.89 rss_kb=23178396
+group 3 ( GK.Glue.C024 GK.Glue.C025 GK.Glue.C026 GK.Glue.C027 GK.Glue.C028 GK.Glue.C029 GK.Glue.C030 GK.Glue.C031) rc=137 secs=30.70 rss_kb=23210872
+group 5 ( GK.Glue.C040 GK.Glue.C041 GK.Glue.C042 GK.Glue.C043 GK.Glue.C044 GK.Glue.C045 GK.Glue.C046 GK.Glue.C047) rc=137 secs=39.78 rss_kb=24256528
+group 4 ( GK.Glue.C032 GK.Glue.C033 GK.Glue.C034 GK.Glue.C035 GK.Glue.C036 GK.Glue.C037 GK.Glue.C038 GK.Glue.C039) rc=137 secs=51.73 rss_kb=28209692
+group 2 ( GK.Glue.C016 GK.Glue.C017 GK.Glue.C018 GK.Glue.C019 GK.Glue.C020 GK.Glue.C021 GK.Glue.C022 GK.Glue.C023) rc=137 secs=64.55 rss_kb=31408788
+group 6 ( GK.Glue.C048 GK.Glue.C049 GK.Glue.C050 GK.Glue.C051 GK.Glue.C052 GK.Glue.C053 GK.Glue.C054 GK.Glue.C055) rc=137 secs=82.83 rss_kb=42113424
+group 1 ( GK.Glue.C008 GK.Glue.C009 GK.Glue.C010 GK.Glue.C011 GK.Glue.C012 GK.Glue.C013 GK.Glue.C014 GK.Glue.C015) rc=0 secs=147.37 rss_kb=55619148
+group 7 ( GK.Glue.C056 GK.Glue.C057 GK.Glue.C058 GK.Glue.C059 GK.Glue.C060 GK.Glue.C061 GK.Glue.C062 GK.Glue.C063) rc=0 secs=147.47 rss_kb=55625012
+final (GK.GlueTotal GK.Final GK.FinalK) rc=0 secs=28.32 rss_kb=26555064

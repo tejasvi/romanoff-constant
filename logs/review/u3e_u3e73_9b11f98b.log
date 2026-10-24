@@ -1,0 +1,38 @@
+[0] params: ELL=[3, 5, 7, 11, 13, 17, 31, 241, 41, 19, 73] CAP=8 C1=8 C0_up=33008090792343479/50000000000000000 log2 in [693147180559945309/1000000000000000000, 69314718055994531/100000000000000000] R0_up=24207/12500 tail_mode=alpha_simplex LMAX=3000000 FACBIG=yes, T1=1200
+[1] factorizations verified to T0=300: 721 primes (0s)
+[2b] class (b): 3231 proven primes, orders 301..1200; T_b(0) <= 5.377e-03; R0_b >= 0.001132202 (135s)
+[2] divisor form: T_up(0) <= 1.140760318  tail mass <= 1.9583e-04 (135s)
+[0e] UNCONDITIONAL: budget rows dropped (mu = 0)
+[3e] BASE [3, 5, 7, 11, 13, 17, 31, 241]: PER0 120, patterns 859201, orbits 7870; ADD [41, 19, 73] (orders [20, 18, 9]; last 73); PER 360 (145s)
+[3e] rows evaluated: Pintz indices j in [1, 37], 37 groups (149s)
+  vertex alpha = 0: minorant 0.110192658808
+  vertex alpha = R0tail e_1: minorant 0.110173883214
+  vertex alpha = R0tail e_2: minorant 0.110161225082
+  vertex alpha = R0tail e_3: minorant 0.110168716344
+  vertex alpha = R0tail e_4: minorant 0.110150673466
+  vertex alpha = R0tail e_5: minorant 0.110171080437
+  vertex alpha = R0tail e_6: minorant 0.110152176727
+  vertex alpha = R0tail e_8: minorant 0.110147847054
+  vertex alpha = R0tail e_9: minorant 0.110167491345
+  vertex alpha = R0tail e_10: minorant 0.110155859872
+  vertex alpha = R0tail e_12: minorant 0.110137203491
+  vertex alpha = R0tail e_15: minorant 0.110165101901
+  vertex alpha = R0tail e_18: minorant 0.110149817540
+  vertex alpha = R0tail e_20: minorant 0.110143096646
+  vertex alpha = R0tail e_24: minorant 0.110133403232
+  vertex alpha = R0tail e_30: minorant 0.110145238553
+  vertex alpha = R0tail e_36: minorant 0.110133973345
+  vertex alpha = R0tail e_40: minorant 0.110139755577
+  vertex alpha = R0tail e_45: minorant 0.110163675498
+  vertex alpha = R0tail e_60: minorant 0.110127181415
+  vertex alpha = R0tail e_72: minorant 0.110129957494
+  vertex alpha = R0tail e_90: minorant 0.110142480104
+  vertex alpha = R0tail e_120: minorant 0.110122689204
+  vertex alpha = R0tail e_180: minorant 0.110123375961
+  vertex alpha = R0tail e_360: minorant 0.110118630182
+[4e] minorant minimized over the 25 vertices of the tail simplex: minimum at g = 360 (149s)
+CERTIFIED: lower density of {p + 2^a} >= 0.110118630
+rounded down: 0.110118
+PASS: certified bound >= claim 0.110118
+149.67 s 335564 KB maxrss
+rc=0 wall=150s

@@ -1,0 +1,38 @@
+{
+ "format": "r45a-u3x",
+ "tail_mode": "alpha_simplex",
+ "params": {
+  "ELL": [
+   3,
+   5,
+   7,
+   11,
+   13,
+   17,
+   31,
+   241,
+   41,
+   19,
+   73
+  ],
+  "CAP": "8",
+  "C1": "67814/10000",
+  "C0_up": "66016181584686958/100000000000000000",
+  "log2_low": "693147180559945309/1000000000000000000",
+  "log2_up": "693147180559945310/1000000000000000000",
+  "R0_up": "193656/100000",
+  "note": "CONDITIONAL on (I2) (Johnston-Trudgian Prop. 2 from Lichtman): budget constant C1 = 6.7814."
+ },
+ "PER": 360,
+ "alpha_j": {
+  "360": "1"
+ },
+ "note": "V4bb (conditional): BASE (period 120) + ADD [41, 19, 73] (period 360); uniform budget multiplier mu = 4.644310e-05 (= 0.003676 norm); adversarial class-(c) tail.",
+ "ADD": [
+  41,
+  19,
+  73
+ ],
+ "n_base_orbits": 7870,
+ "mu": "464431/10000000000"
+}

@@ -1,0 +1,35 @@
+[0] params: ELL=[3, 5, 7, 13, 43, 29, 127, 23] CAP=8 C1=8 C0_up=33008090792343479/50000000000000000 log2 in [693147180559945309/1000000000000000000, 69314718055994531/100000000000000000] R0_up=24207/12500 tail_mode=alpha_simplex LMAX=3000000 FACBIG=no
+[1] factorizations verified to T0=300: 721 primes (0s)
+[2] divisor form: T_up(0) <= 1.209877030  tail mass <= 1.3280e-03 (128s)
+[0e] UNCONDITIONAL: budget rows dropped (mu = 0)
+[3e] BASE [3, 5]: PER0 4, patterns 11, orbits 4; ADD [7, 13, 43, 29, 127, 23] (orders [3, 12, 14, 28, 7, 11]; last 23); PER 924 (128s)
+[3e] rows evaluated: Pintz indices j in [2, 32], 30 groups (142s)
+  vertex alpha = 0: minorant 0.107682756041
+  vertex alpha = R0tail e_1: minorant 0.107563738156
+  vertex alpha = R0tail e_2: minorant 0.107485111815
+  vertex alpha = R0tail e_3: minorant 0.107533007918
+  vertex alpha = R0tail e_4: minorant 0.107422155615
+  vertex alpha = R0tail e_6: minorant 0.107431996634
+  vertex alpha = R0tail e_7: minorant 0.107557680489
+  vertex alpha = R0tail e_11: minorant 0.107558139659
+  vertex alpha = R0tail e_12: minorant 0.107343203152
+  vertex alpha = R0tail e_14: minorant 0.107473364713
+  vertex alpha = R0tail e_21: minorant 0.107525279768
+  vertex alpha = R0tail e_22: minorant 0.107475822100
+  vertex alpha = R0tail e_28: minorant 0.107403393647
+  vertex alpha = R0tail e_33: minorant 0.107525980445
+  vertex alpha = R0tail e_42: minorant 0.107416984817
+  vertex alpha = R0tail e_44: minorant 0.107409958816
+  vertex alpha = R0tail e_66: minorant 0.107420247171
+  vertex alpha = R0tail e_77: minorant 0.107551796734
+  vertex alpha = R0tail e_84: minorant 0.107318858823
+  vertex alpha = R0tail e_132: minorant 0.107327388070
+  vertex alpha = R0tail e_154: minorant 0.107463521912
+  vertex alpha = R0tail e_231: minorant 0.107517888546
+  vertex alpha = R0tail e_308: minorant 0.107390314963
+  vertex alpha = R0tail e_462: minorant 0.107404528907
+  vertex alpha = R0tail e_924: minorant 0.107301900425
+[4e] minorant minimized over the 25 vertices of the tail simplex: minimum at g = 924 (142s)
+CERTIFIED: lower density of {p + 2^a} >= 0.107301900
+rounded down: 0.107301
+rc=0

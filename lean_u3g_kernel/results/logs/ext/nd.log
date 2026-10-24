@@ -1,0 +1,4 @@
+axiom propext {a b : Prop} : Iff a b → Eq a b
+
+Checked 734 declarations with no errors
+rss_kb=4856516

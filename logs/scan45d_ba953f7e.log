@@ -1,0 +1,6 @@
+class (a) 721 primes R0_a 1.935231965; class (b) 3231 primes R0_b 0.001132202; tail 1.9583e-04 (25s)
+base ELL=[3, 5, 7, 11, 13, 17, 31, 241] PER=120 patterns=859201 orbits=7870 (34s)
+base+[41, 19]: PER 360 rows 3140130: crude 0.109598746  alpha-form LB 0.109943846 (gap 0.0e+00; top g 360:1.00) (148s)
++73: PER 360 rows 31401300: crude 0.109772845  alpha-form LB 0.110118630 (gap 0.0e+00; top g 360:1.00) (598s)
+  +73: crude gain +1.741e-04; alpha-form gain +1.748e-04; alpha-form vs U2 crude +5.199e-04 (598s)
+rc=0

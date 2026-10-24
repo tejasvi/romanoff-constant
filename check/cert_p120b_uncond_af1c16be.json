@@ -1,0 +1,28 @@
+{
+ "format": "r45a-v2",
+ "tail_mode": "crude",
+ "params": {
+  "ELL": [
+   3,
+   5,
+   7,
+   11,
+   13,
+   17,
+   31,
+   41,
+   241
+  ],
+  "CAP": "8",
+  "C1": "8",
+  "C0_up": "66016181584686958/100000000000000000",
+  "log2_low": "693147180559945309/1000000000000000000",
+  "log2_up": "693147180559945310/1000000000000000000",
+  "R0_up": "193656/100000",
+  "note": "UNCONDITIONAL variant: all budget multipliers zero; (I2) unused; C1 = 8 is the sum of the (I1) caps and does not enter the bound."
+ },
+ "PER": 120,
+ "n_orbits": 92206,
+ "duals": [],
+ "note": "U2 certificate, UNCONDITIONAL (mu = 0; inputs (I1), (I3), (I4), (I5) only). Evaluate with: python3 -I check_r45a5_rel_ab861be2.py fac300_41e4cdd6.json cert_p120b_uncond.json 3000000 fac1200_fdb_af082adc.json 1200 --claim 0.109406"
+}

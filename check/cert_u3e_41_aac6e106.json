@@ -1,0 +1,33 @@
+{
+ "format": "r45a-u3e",
+ "tail_mode": "alpha_simplex",
+ "params": {
+  "ELL": [
+   3,
+   5,
+   7,
+   11,
+   13,
+   17,
+   31,
+   241,
+   41
+  ],
+  "CAP": "8",
+  "C1": "8",
+  "C0_up": "66016181584686958/100000000000000000",
+  "log2_low": "693147180559945309/1000000000000000000",
+  "log2_up": "693147180559945310/1000000000000000000",
+  "R0_up": "193656/100000",
+  "note": "UNCONDITIONAL: (I2) unused; budget rows dropped; C1 = CAP does not enter the bound."
+ },
+ "PER": 120,
+ "alpha_j": {
+  "120": "1"
+ },
+ "note": "TEST: cert_u3x_41 in format r45a-u3e (41 is the last added prime).",
+ "ADD": [
+  41
+ ],
+ "n_base_orbits": 7870
+}

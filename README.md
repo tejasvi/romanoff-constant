@@ -1,10 +1,10 @@
-# New lower bounds for Romanoff's constant (version 10)
+# New lower bounds for Romanoff's constant (version 11)
 
-Programs and data for the paper *New lower bounds for Romanoff's constant* by Tejasvi Singh Tomar
-(doi:10.5281/zenodo.23609839). The programs, the data and five proofs in Lean 4, two of the two theorems and three of
-weaker bounds, are archived at doi:10.5281/zenodo.23609840.
+Programs, data and Lean proofs for the paper *New lower bounds for Romanoff's constant* by Tejasvi Singh Tomar
+(doi:10.5281/zenodo.23715954), archived at doi:10.5281/zenodo.23715955. The LaTeX source of the paper is
+`paper/main.tex`.
 
-This is version 10 of the archive; the section Versions at the end lists the changes from earlier versions. Section,
+This is version 11 of the archive; the section Versions at the end lists the changes from earlier versions. Section,
 proposition, lemma and equation numbers refer to the paper unless another source is named.
 
 ## Results
@@ -17,11 +17,8 @@ Let `d` be the lower density of the set of integers `p + 2^a` with `p` prime and
 The best lower bound in the literature was 0.10788, from the method of Elsholtz and Schlage-Puchta (Math. Z. 288 (2018),
 end of p. 721; recomputed by Johnston and Trudgian, arXiv:2605.17825v2). Theorem 1.2 assumes the bound of Proposition 2
 of Johnston and Trudgian, which they deduce from Theorems 1.2 and 1.7 of J. D. Lichtman, arXiv:2309.08522. Both papers
-are preprints. Theorem 1.1 uses neither. Theorems 1.1 and 1.2 are proved in Lean twice: in `lean_u3g/`, with compiled
-checks, and in `lean_u3g_kernel/`, with all computations checked by the Lean kernel. Three further Lean proofs establish
-weaker bounds: the one in `lean_u3e/` gives `d >= 0.110449`, the bound of the same method for the modulus `l_1` below,
-and the other two give `d >= 0.109406` and, under the same assumption, `d >= 0.117953`. In all five the analytic inputs
-from the literature are hypotheses.
+are preprints. Theorem 1.1 uses neither. Both theorems are also proved in Lean 4, with the analytic inputs from the
+literature as hypotheses (section Formal proofs in Lean).
 
 ## Method
 
@@ -55,6 +52,7 @@ of the file's SHA-256. "Earlier" marks files from previous versions of the archi
 
 | Path | Content |
 |---|---|
+| `paper/main.tex` | the LaTeX source of the paper |
 | `check/check_r45u3f_a028b118.py` | the checking program for Theorems 1.1 and 1.2 (period 27720) |
 | `check/cert_u3g_27720_703c7aee.json` | the certificate of Theorem 1.1 |
 | `check/cert_v4g_27720_95ae70b9.json` | the certificate of Theorem 1.2 |
@@ -89,7 +87,9 @@ of the file's SHA-256. "Earlier" marks files from previous versions of the archi
 
 ## Checking
 
-The checkers need Python 3 with python-flint (tested with 0.9.0) and numpy. In the directory `check`:
+The checkers need Python 3 with python-flint (tested with 0.9.0) and numpy. The first two commands below check
+Theorems 1.1 and 1.2, the next two the bounds 0.110449 and 0.118859 for `l_1`, and the last two the bounds
+`d >= 0.117953` and `d >= 0.109406`. In the directory `check`:
 
     python3 -I check_r45u3f_a028b118.py fac300_41e4cdd6.json cert_u3g_27720_703c7aee.json 3000000 fac1200_fdb_af082adc.json 1200 --claim 0.110825 --workers 42
     python3 -I check_r45u3f_a028b118.py fac300_41e4cdd6.json cert_v4g_27720_95ae70b9.json 3000000 fac1200_fdb_af082adc.json 1200 --claim 0.119178 --workers 42
@@ -116,10 +116,10 @@ Logs: `logs/u3f_u3g27720_first_bcb0b0d1.log`, `logs/u3f_v4g27720_first_d7f9ea4c.
 Each run prints the certified value and the value rounded down, and ends with `PASS` and exit code 0 if the certified
 value is at least the claim. The line `CERTIFIED` gives the smallest value rounded to the nearest multiple of `1e-9`.
 For Theorems 1.1 and 1.2 and for the bounds 0.110449 and 0.118859 this rounding goes up: the lines for the vertices show
-the smallest values to 12 digits, 0.11082573880..., 0.11917890968..., 0.11044979866... and 0.11885963462..., and the
-line `CERTIFIED` shows them rounded up in the ninth decimal. The line `rounded down` and the comparison with the claim
-are exact. `3000000` is the bound at which the dynamic program over the orders stops a branch, and `1200` is the largest
-order of 2 modulo the primes of class (b) (Section 5). Without the arguments
+the smallest values to 12 digits, 0.11082573880..., 0.11917890968..., 0.11044979866... and 0.11885963462...,
+respectively, and the line `CERTIFIED` shows them rounded up in the ninth decimal. The line `rounded down` and the
+comparison with the claim are exact. `3000000` is the bound at which the dynamic program over the orders stops a branch,
+and `1200` is the largest order of 2 modulo the primes of class (b) (Section 5). Without the arguments
 `fac1200_fdb_af082adc.json 1200` the checkers leave out class (b) and certify smaller values.
 
 The first checker recomputes everything from the factorization files and the
@@ -152,7 +152,7 @@ vertices; `u3x_v3_to_u3e_82e5c280.diff` lists the changes. For a certificate of 
 of Proposition 4.2:
 - It splits `l` into `l' = 3*5*7*11*13*17*31*241` and the added primes, 41, 19, 73, 23 and 37 for `l_1`. It
   enumerates the residue patterns modulo `l'` and the 7,870 rotation orbits of the nonempty ones, combines each orbit
-  with all residues modulo the added primes, and checks that the class counts add up to `l` (Section 6).
+  with all residues modulo the added primes, and checks that the class counts add up to `l` (Appendix A).
 - It groups the bounds for the singular series of classes (a) and (b) by the divisors `g` of the period: `T_0(c)` is the
   sum of the numbers `B_g` over the `g` that divide `c` (Section 5), each `B_g` rounded up to a multiple of
   `2^-48`; the bounds for the branches that the dynamic program stops go into `B_1`. For each combination it computes
@@ -189,26 +189,26 @@ by the core added primes one at a time, without the joint evaluation at the last
 the field `IND` primes `q` that divide the period `P` exactly once, so that `P = P_c prod q` with `P_c` prime to each
 `q`; for the certificates of Theorems 1.1 and 1.2 these are 7 and 11, and `P_c = 360`. The checker then:
 - classifies every added prime `p` as a core prime (`ord_p(2)` divides `P_c`: here 41, 19, 73 and 37) or as attached to
-  one `q` (`ord_p(2) = q m_p` with `m_p` dividing `P_c`: here 43 and 29 to 7, with `m_p = 2` and 4, and 23 to 11, with
-  `m_p = 1`), and refuses any other case;
+  one `q` (`ord_p(2) = q m_p` with `m_p` dividing `P_c`: here 43 and 29 to 7, with `m_p = 2` and 4, respectively, and 23
+  to 11, with `m_p = 1`), and refuses any other case;
 - writes the residues modulo the period as tuples (`r mod P_c`, `r mod 7`, `r mod 11`) and computes the sums `S_g` from
   the numbers of the residues modulo `P_c` that survive `l'` and the core primes in the classes modulo `lcm(g_c, M)`,
-  with `M = 4` the least common multiple of the `m_p` (Section 6);
+  with `M = 4` the least common multiple of the `m_p` (Appendix A);
 - evaluates one combination of exclusions by the attached primes of each `q` for every orbit under the permutations of
   the residues modulo `q`, with the number of residue classes modulo the attached primes in the orbit as its
   multiplicity (no exclusion by `p` stands for `p - ord_p(2)` residues): 23 orbits of the 435 combinations for 7 and 2
-  of the 12 for 11, so 46 in all; it checks that the multiplicities add up to `43*29 = 1247` and to 23;
+  of the 12 for 11, so 46 in all; it checks that the multiplicities add up to `43*29 = 1247` for 7 and to 23 for 11;
 - checks, before the floating-point matrix products that enter the bound, bounds under which every partial sum is an
   integer below `2^53`, so that the products are exact, and multiplies the sums by the multiplicities in Python
   integers.
 
-The u3e checker and the main checker were tested as follows (Section 6). Vertex values agree when all 12
+The u3e checker and the main checker were tested as follows (Appendix A). Vertex values agree when all 12
 printed digits are equal.
 
 | certificates | what is tested | checkers | result | logs |
 |---|---|---|---|---|
 | `cert_u3e_73_f4510070.json` | the earlier certificate `cert_u3c_73_18aa78b6.json` (the modulus `3*5*7*11*13*17*19*31*41*73*241`, period 360) in the format `r45a-u3e` | u3e and v3 | both certify 0.110118630 (`--claim 0.110118`); 24 of the 25 vertex values agree, and the value at `e_72` differs by `1e-12`, since the u3e checker rounds on the grid `2^-48` and the v3 checker on the grid `2^-40` | `logs/review/u3e_u3e73_9b11f98b.log`, `logs/u3x_u3c73_6c56e930.log` |
-| `cert_u3d_u3x_43bc59a1.json`, `cert_v4d_u3x_69a4a859.json` | `cert_u3d_37e_305b0bd9.json` and `cert_v4d_37e_763ec021.json` (modulus `l_1/23`) in the format `r45a-u3x` of the v3 checker, which evaluates every exclusion at every added prime separately | v3 | `--claim 0.110277` and `--claim 0.118747` pass, with the smallest vertex values 0.110277417054 and 0.118747326926 of the u3e checker; all 25 vertex values agree for `cert_v4d_37e`, and 23 for the other (`e_8` and `e_45` differ by `1e-12`) | `logs/review/u3x_u3d37_878419da.log`, `logs/review/u3x_v4d37_754e23b3.log` (about 2.2 and 2.4 hours with 48 worker processes) |
+| `cert_u3d_u3x_43bc59a1.json`, `cert_v4d_u3x_69a4a859.json` | `cert_u3d_37e_305b0bd9.json` and `cert_v4d_37e_763ec021.json` (modulus `l_1/23`) in the format `r45a-u3x` of the v3 checker, which evaluates every exclusion at every added prime separately | v3 | `--claim 0.110277` and `--claim 0.118747` pass, with the smallest vertex values 0.110277417054 and 0.118747326926 of the u3e checker; all 25 vertex values agree for `cert_v4d_37e`, and 23 for the other (`e_8` and `e_45` differ by `1e-12`) | `logs/review/u3x_u3d37_878419da.log`, `logs/review/u3x_v4d37_754e23b3.log` (about 2.2 and 2.4 hours, respectively, with 48 worker processes) |
 | `cert_u3d_37e_305b0bd9.json`, `cert_v4d_37e_763ec021.json` | the unconditional and the conditional certificate for `l_1/23` | u3e | 0.110277417 and 0.118747326 (`--claim 0.110277`, `--claim 0.118747`); the review ran `cert_v4d_37e` at the claim and with `--claim 0.118748` (`FAIL`) | `logs/u3e_u3d37_0e81d689.log`, `logs/u3e_v4d37_8ebad28f.log`, `logs/review/u3e_v4d37_30fec38c.log`, `logs/review/u3e_v4d37_above_cdd7c1b1.log` |
 | `cert_u3d_perm_2e5fe6fa.json` | `cert_u3d_37e` with the added primes in the order 41, 19, 37, 73, so that 73 instead of 37 is evaluated as the last added prime | u3e | in the review, the same 25 vertex values as `cert_u3d_37e` | `logs/review/u3e_u3d37_e38cf6e6.log`, `logs/review/u3e_u3d37perm_5338ef8d.log` |
 | `cert_u3e_41_23_4c20954a.json`, `cert_u3e_23_41_64008dfe.json` | the added primes 41 and 23 (period 1320), with either of them last | u3e | both certify 0.109834575 (`--claim 0.109834`); the 33 vertex values agree | `logs/u3e_u3e4123_6b24f0d0.log`, `logs/u3e_u3e2341_5a7ff866.log` (about 3 minutes each with one worker process) |
@@ -219,8 +219,7 @@ printed digits are equal.
 | `cert_u3c_73_18aa78b6.json`, `cert_v4bb_73_73e5cf24.json` | the earlier certificates for 0.110118 and 0.118601 | v3 | 0.110118630 and 0.118601142 | `logs/u3x_u3c73_6c56e930.log`, `logs/u3x_v4bb73_7a2c56b2.log` |
 
 The two tests with period 924 use class (a) only, without the file for class (b), and take a few minutes on one core.
-Their certificates contain only parameters and are not produced by a program in `reproduce/`. The fields `note` of
-`cert_u3d_u3x`, `cert_v4d_u3x` and `cert_u3d_perm` are copied unchanged from the certificates they come from.
+Their certificates contain only parameters and are not produced by a program in `reproduce/`.
 
 The directory `controls/` holds four certificates derived from `cert_u3e_73_f4510070.json` and the output of the checker
 on them. Each run ends with `FAIL` and exit code 1: `alpha_mass` puts 1.001 times the allowed mass on the point `alpha_j`,
@@ -236,76 +235,84 @@ patterns, as the first checker does, and `cert_u3e_41_aac6e106.json` is `cert_u3
 
 ## Formal proofs in Lean
 
-Each of the directories `lean/`, `lean_kernel/`, `lean_u3e/`, `lean_u3g/` and `lean_u3g_kernel/` holds one proof, with a
-`README.md` that describes its files and gives the build commands.
+`lean_u3g/` and `lean_u3g_kernel/` prove Theorems 1.1 and 1.2; `lean/` and `lean_kernel/` prove `d >= 0.109406` and,
+under the bound (2.2), `d >= 0.117953`; `lean_u3e/` proves `d >= 0.110449`. Each of the five directories is a separate
+Lake project for Lean 4 (version v4.35.0-rc3) with Mathlib (commit c55e6e786f49), and its `README.md` describes its
+files and gives the build commands.
 
-The directory `lean/` contains a proof of the bounds `d >= 0.109406` and, under the bound (2.2), `d >= 0.117953` in Lean
-4 (version v4.35.0-rc3) with Mathlib (commit c55e6e786f49): the theorems `Romanoff.romanoff_U2` and
-`Romanoff.romanoff_v3` in `lean/Romanoff/Theorems.lean`. They are weaker than Theorems 1.1 and 1.2. The analytic inputs
-of Section 2 are the hypotheses of these theorems: the per-class bound (2.1) for the modulus
-`l = 3*5*7*11*13*17*31*41*241`, the prime number theorem in progressions modulo `l` and the bound (2.3) for `R0`, stated
-for its finite partial sums, and for the second bound also the bound (2.2) for the total. Pintz's inequality (Lemma 2.1)
-is proved. The checks of the data run as compiled code through `native_decide`, so `#print axioms` lists the three
-standard axioms and four auxiliary axioms for each theorem (`lean/results/axioms_shipped.txt`).
+The directory `lean/` contains a proof of the bounds `d >= 0.109406` and, under the bound (2.2), `d >= 0.117953`: the
+theorems `Romanoff.romanoff_U2` and `Romanoff.romanoff_v3`, respectively, in `lean/Romanoff/Theorems.lean`. They are
+weaker than Theorems 1.1 and 1.2. The analytic inputs of Section 2 are the hypotheses of these theorems: the per-class
+bound (2.1) for the modulus `l = 3*5*7*11*13*17*31*41*241`, the prime number theorem in progressions modulo `l` and the
+bound (2.3) for `R0`, stated for its finite partial sums, and for the second bound also the bound (2.2) for the total.
+Pintz's inequality (Lemma 2.1) is proved. The checks of the data run as compiled code through `native_decide`, so
+`#print axioms` lists the three standard axioms and four auxiliary axioms for each theorem
+(`lean/results/axioms_shipped.txt`). The proof uses the Lagrangian bound with equal multipliers, so that the inner
+minimum for a class depends only on the rotation orbit of its pattern, and its bounds `T+(c)` for the sums `T(c)` lie
+below those of the checker by less than `2e-7` relative.
 
-The directory `lean_kernel/` contains a second proof, a separate Lake project in which no module uses `native_decide`:
-the theorems `Romanoff.romanoff_U2_K` and `Romanoff.romanoff_v3_K` in `lean_kernel/Romanoff/CertKFinal.lean` have the
-same statements and hypotheses, and each depends only on the three standard axioms
-(`lean_kernel/results/axioms_shipped.txt`). The computations are split into theorems that the kernel checks by
-evaluation: 244 for the list of primes, the lower sums for `R0` and the bounds `T+(c)`, and 185 for the Lagrangian
-bound, with the 92,206 rotation orbits computed by a fold whose steps the kernel checks. `lean_kernel/README.md` also
-gives the regeneration commands; the build took 1 h 35 min, not counting Mathlib, on one machine with 32 threads and 128
-GB of memory.
+The directory `lean_kernel/` contains a second proof, in which no module uses `native_decide`: the theorems
+`Romanoff.romanoff_U2_K` and `Romanoff.romanoff_v3_K` in `lean_kernel/Romanoff/CertKFinal.lean` have the same statements
+and hypotheses, and each depends only on the three standard axioms (`lean_kernel/results/axioms_shipped.txt`). The
+computations are split into theorems that the kernel checks by evaluation: 244 for the list of primes, the lower sums
+for `R0` and the bounds `T+(c)`, and 185 for the Lagrangian bound, with the 92,206 rotation orbits computed by a fold
+whose steps the kernel checks. `lean_kernel/README.md` also gives the regeneration commands. The build took 1 h 35 min,
+not counting Mathlib, on one machine with 32 threads and 128 GB of memory.
 
-The directory `lean_u3e/` contains a proof of the bound `d >= 0.110449` for `l_1`, a separate Lake project with the same
-Lean and Mathlib versions: the theorem `Romanoff.E.romanoff_U3e` in `lean_u3e/Romanoff/E/U3e.lean` states
-`0.110449 <= liminf d_N`, where `d_N` is the proportion of the integers `1 <= n <= N` of the form `p + 2^a`. Its
-hypotheses are the per-class bound (2.1) and the prime number theorem in progressions for the modulus `l_1`, and the
-bound (2.3) for `R0`, stated as for the other proofs. Six computations run as compiled code through `native_decide`:
-five checks of the data and of the bounds for the singular series, and the evaluation of the bound by a program written
-in Lean, which follows the u3e checker. So `#print axioms` lists the three standard axioms and six auxiliary axioms
-(`lean_u3e/results/axioms_shipped.txt`). The exported proof was accepted by `leanchecker`, which runs Lean's kernel, and
-by two further implementations of the Lean kernel, nanoda and lean4lean, with the six auxiliary axioms admitted. The
-program obtains the value 0.1104501353..., a little above the checker's smallest value, because its bounds for the
-singular series spread the contribution of the branches that the dynamic program stops over the divisors of the period,
-as `lean_u3e/README.md` explains. The evaluation takes about 50 minutes on 90 cores.
+The directory `lean_u3e/` contains a proof of the bound `d >= 0.110449` for `l_1`: the theorem `Romanoff.E.romanoff_U3e`
+in `lean_u3e/Romanoff/E/U3e.lean` states `0.110449 <= liminf d_N`, where `d_N` is the proportion of the integers
+`1 <= n <= N` of the form `p + 2^a`. Its hypotheses are the per-class bound (2.1) and the prime number theorem in
+progressions for the modulus `l_1`, and the bound (2.3) for `R0`, stated as for the other proofs. Six computations run
+as compiled code through `native_decide`: five checks of the data and of the bounds for the singular series, and the
+evaluation of the bound by a program written in Lean, which follows the u3e checker. So `#print axioms` lists the three
+standard axioms and six auxiliary axioms (`lean_u3e/results/axioms_shipped.txt`). The exported proof was accepted by
+`leanchecker`, which runs Lean's kernel, and by two further implementations of the Lean kernel, nanoda and lean4lean,
+with the six auxiliary axioms admitted. The program obtains the value 0.1104501353..., a little above the checker's
+smallest value, because its bounds for the singular series spread the contribution of the branches that the dynamic
+program stops over the divisors of the period, as `lean_u3e/README.md` explains. The evaluation takes about 50 minutes
+on 90 cores.
 
-The directory `lean_u3g/`, another separate Lake project with the same versions, contains the proofs of Theorems 1.1 and
-1.2: the theorems `Romanoff.G.romanoff_U3g` in `lean_u3g/Romanoff/G/U3g.lean` and `Romanoff.G.romanoff_V4g` in
-`lean_u3g/Romanoff/G/V4g.lean` state `0.110825 <= liminf d_N` and `0.119178 <= liminf d_N`. The hypotheses are those of
-`lean_u3e/` with `l_3` in place of `l_1`, and for Theorem 1.2 also the bound (2.2). Of the six computations that run
-through `native_decide`, five check the period-27720 tables and one evaluates both bounds at the vertex `e_27720`, where
-they are smallest, with a program written in Lean; `#print axioms` lists the three standard axioms and these six
-auxiliary axioms (`lean_u3g/results/axioms_shipped.txt`). The program obtains the values 0.1108276292... and
-0.1191809294..., a little above the main checker's smallest values for the same reason as in `lean_u3e/`; with the
-claims raised to 0.110828 and 0.119181 the evaluation fails. It runs in 64 parallel tasks and took about 46 minutes. The
-exported proof was accepted by `leanchecker` and by lean4lean, with the six auxiliary axioms admitted, and both rejected
-a copy in which the proof of Theorem 1.2 is replaced by that of Theorem 1.1; nanoda stopped at an internal capacity
-limit on this export. The Lean kernel also replayed, one module at a time and again with the six auxiliary axioms
-admitted, 81 of the 82 modules of the project that make up the proof; the remaining one, which contains only
+The directory `lean_u3g/` contains the proofs of Theorems 1.1 and 1.2: the theorems `Romanoff.G.romanoff_U3g` in
+`lean_u3g/Romanoff/G/U3g.lean` and `Romanoff.G.romanoff_V4g` in `lean_u3g/Romanoff/G/V4g.lean` state
+`0.110825 <= liminf d_N` and `0.119178 <= liminf d_N`, respectively. The hypotheses are those of `lean_u3e/` with `l_3`
+in place of `l_1`, and for Theorem 1.2 also the bound (2.2). Of the six computations that run through `native_decide`,
+five check the period-27720 tables and one evaluates both bounds at the vertex `e_27720`, where they are smallest, with
+a program written in Lean; `#print axioms` lists the three standard axioms and these six auxiliary axioms
+(`lean_u3g/results/axioms_shipped.txt`). Because these six computations run as compiled code, the trusted base of this
+proof includes the Lean compiler, the C compiler that it uses, the Lean runtime and the compiled core-library functions
+that the checks call. The program obtains the values 0.1108276292... and 0.1191809294..., respectively, a little above
+the main checker's smallest values for the same reason as in `lean_u3e/`. As a control, the evaluation fails with the
+claims raised to 0.110828 and 0.119181, respectively. It runs in 64 parallel tasks and took about 46 minutes.
+
+Further checks of `lean_u3g/`. The exported proof was accepted by `leanchecker` and by lean4lean, with the six auxiliary
+axioms admitted, and both rejected a copy in which the proof of Theorem 1.2 is replaced by that of Theorem 1.1; nanoda
+stopped at an internal capacity limit on this export. The Lean kernel also replayed, one module at a time and with the
+same axioms admitted, 81 of the 82 modules of the project that make up the proof; the remaining one, which contains only
 definitions, was not part of that run. Built from scratch, with the evaluation run again, the files of this directory
 reproduced the declarations and axioms of the build on which these checks were made, and its compiled modules for the
 evaluation and for the two theorems (`Native.olean`, `U3g.olean`, `V4g.olean`) byte for byte.
 
-The directory `lean_u3g_kernel/` contains a second proof of Theorems 1.1 and 1.2, a separate Lake project with the same
-versions in which no module uses `native_decide`: the theorems `Romanoff.G.romanoff_U3g_K` and
-`Romanoff.G.romanoff_V4g_K` in `lean_u3g_kernel/GK/FinalK.lean` have the same statements and hypotheses as those of
-`lean_u3g/`, and each depends only on the three standard axioms (`lean_u3g_kernel/results/axioms_shipped.txt`). The
-kernel checks the data and the bounds for the sums `T(c)` in 327 parts and computes the list of the rotation orbits of
-the patterns modulo `l'`, 7,870 orbits and the empty pattern, with the number of classes in each. Its program for the
-two bounds treats the core primes 19, 73 and 37 as attached to the digit `floor((r mod 9) / 3)`, so that their 7,030
-combinations of exclusions enter only through 412 tables; a Lean proof shows that it gives the value of the program of
-`lean_u3g/` for every subset of `Z/120` in place of a pattern. The kernel evaluates it for each of these 7,871 patterns
-in a separate module (`lean_u3g_kernel/GK/Keys/`), adds the results in 64 further modules and checks both bounds on the
-total; the values are those of `lean_u3g/`. Most of the files of the directory are generated, by generators that it
-contains. The 7,871 modules of the patterns took from 877 to 1,255 seconds each to build, 2,494 CPU-hours in total
-(`lean_u3g_kernel/results/FLEET_BUILD_LOG.tsv`). The Lean kernel replayed all 8,557 modules of the project that make up
-the proof, one at a time (359,992 constants), compiled from the sources described under Provenance in
-`lean_u3g_kernel/README.md`. The stored statements of the two theorems equal those of `lean_u3g/`. A rebuild from source
-gave the same declarations in every module it rebuilt, and byte-identical compiled files for 150 pattern modules chosen
-at random, 4 of the 64 summing modules and the final modules; `leanchecker`, lean4lean and nanoda accepted the exported
-proofs of the first two of these 150 pattern modules. The build fails when the bound of Theorem 1.1 is raised to
-0.110828 or when one entry in the module of a pattern is changed.
+The directory `lean_u3g_kernel/` contains a second proof of Theorems 1.1 and 1.2, in which no module uses
+`native_decide`: the theorems `Romanoff.G.romanoff_U3g_K` and `Romanoff.G.romanoff_V4g_K` in
+`lean_u3g_kernel/GK/FinalK.lean` have the same statements and hypotheses as those of `lean_u3g/`, and each depends only
+on the three standard axioms (`lean_u3g_kernel/results/axioms_shipped.txt`). The kernel checks the data and the bounds
+for the sums `T(c)` in 327 parts and computes the list of the rotation orbits of the patterns modulo `l'`, 7,870 orbits
+and the empty pattern, with the number of classes in each. Its program for the two bounds treats the core primes 19, 73
+and 37 as attached to the digit `floor((r mod 9) / 3)`, so that their 7,030 combinations of exclusions enter only
+through 412 tables; a Lean proof shows that it gives the value of the program of `lean_u3g/` for every subset of `Z/120`
+in place of a pattern. The kernel evaluates it for each of these 7,871 patterns in a separate module
+(`lean_u3g_kernel/GK/Keys/`), adds the results in 64 further modules and checks both bounds on the total; the values are
+those of `lean_u3g/`. Most of the files of the directory are generated, by generators that it contains. The 7,871
+modules of the patterns took from 877 to 1,255 seconds each to build, 2,494 CPU-hours in total
+(`lean_u3g_kernel/results/FLEET_BUILD_LOG.tsv`).
+
+Further checks of `lean_u3g_kernel/`. The Lean kernel replayed all 8,557 modules of the project that make up the proof,
+one at a time (359,992 constants), compiled from the sources described under Provenance in `lean_u3g_kernel/README.md`.
+The stored statements of the two theorems equal those of `lean_u3g/`. A rebuild from source gave the same declarations
+in every module it rebuilt, and byte-identical compiled files for 150 pattern modules chosen at random, 4 of the 64
+summing modules and the final modules. `leanchecker`, lean4lean and nanoda accepted the exported proofs of the first two
+of these 150 pattern modules. As a control, the build fails when the bound of Theorem 1.1 is raised to 0.110828 or when
+one entry in the module of a pattern is changed.
 
 ## Reproduction
 
@@ -361,22 +368,27 @@ the first eight hex digits of the file's SHA-256. To run them, copy them to name
   evaluates the bound of Proposition 4.2 for candidate added primes. The command
   `python3 -I scan45d.py ../check/fac300_41e4cdd6.json ../check/fac1200_fdb_af082adc.json 3,5,7,11,13,17,31,241 41,19 73`
   prints 0.109943846 for the added primes 41 and 19 and 0.110118630 for 41, 19 and 73; its output is
-  `logs/scan45d_ba953f7e.log` (10 minutes on one core, 20 GB of memory). The usage lines of all four scan programs say
-  `scan45b.py`, and the docstring of `scan45e.py` still describes the unconditional bound.
+  `logs/scan45d_ba953f7e.log` (10 minutes on one core, 20 GB of memory).
 
 ## Notes
 
-- The `note` fields inside the certificates of the bounds `d >= 0.117953` and `d >= 0.109406` were written for the
-  earlier checker `check_r45a5_rel_ab861be2.py` and name the certificates without the hash suffix. The checker here
-  supersedes that one: it adds the input checks listed above and certifies the same values.
+- Some comments and metadata inside the files are out of date or use other names:
+  - The `note` fields inside the certificates of the bounds `d >= 0.117953` and `d >= 0.109406` were written for the
+    earlier checker `check_r45a5_rel_ab861be2.py` and name the certificates without the hash suffix. The checker here
+    supersedes that one: it adds the input checks listed above and certifies the same values.
+  - The fields `note` of `cert_u3d_u3x`, `cert_v4d_u3x` and `cert_u3d_perm` are copied unchanged from the certificates
+    they come from.
+  - The usage lines of all four scan programs say `scan45b.py`, and the docstring of `scan45e.py` still describes the
+    unconditional bound.
+  - The docstrings of `make_u3_certs.py` and `make_u3de_certs.py` use `U3b` for the stage of version 3 that includes
+    both of the certificates `U3b` and `U3c` named below.
 - The notes call the inputs (I1) to (I5): (I1) is the per-class bound (2.1), (I2) the total bound (2.2),
   (I3) the prime number theorem in progressions, (I4) Lemma 2.1 and (I5) the bound (2.3) for `R0`.
 - The docstrings and the `note` fields of the files use these names:
   - `U2`: the bound `d >= 0.109406`;
   - `U3a`: the same modulus with the tail of Proposition 4.2 (0.109618905);
   - `BASE` and `ADD`: the factor `l'` and the added primes;
-  - `U3b` and `U3c`, in the `note` fields: the certificates with the added primes 41 and 19, and 41, 19 and 73 (the
-    docstrings of `make_u3_certs.py` and `make_u3de_certs.py` use `U3b` for the stage of version 3 that includes both);
+  - `U3b` and `U3c`, in the `note` fields: the certificates with the added primes 41 and 19, and 41, 19 and 73;
   - `V4bb`: the certificate `cert_v4bb_73`;
   - `U3e` and `V4e`: the certificates of the bounds 0.110449 and 0.118859 (`V4e` is the conditional form of `U3e`);
   - `U3g` and `V4g`: the certificates of Theorems 1.1 and 1.2;
@@ -394,8 +406,13 @@ the first eight hex digits of the file's SHA-256. To run them, copy them to name
 
 ## Versions
 
-- Version 10 adds the proofs of Theorems 1.1 and 1.2 in Lean 4 that the kernel checks alone, in `lean_u3g_kernel/`.
-  Apart from this README, `CITATION.cff` and `SHA256SUMS`, the files of version 9 are unchanged.
+- Version 11 adds the LaTeX source of the paper, `paper/main.tex`. The text of the paper was revised: the abstract and
+  the introduction were rewritten, and the computation and the formal proofs moved to Appendices A and B, which describe
+  the proof of Theorems 1.1 and 1.2 that the Lean kernel checks; this README also describes the version with compiled
+  checks and the earlier formal proofs. Apart from this README, `CITATION.cff` and `SHA256SUMS`, the files of version 10
+  are unchanged.
+- Version 10 (doi:10.5281/zenodo.23609840) added the proofs of Theorems 1.1 and 1.2 in Lean 4 that the kernel checks
+  alone, in `lean_u3g_kernel/`.
 - Version 9 (doi:10.5281/zenodo.23588537) added the proofs of Theorems 1.1 and 1.2 in Lean 4, with compiled checks, in
   `lean_u3g/`.
 - Version 8 (doi:10.5281/zenodo.23583779) raised Theorem 1.2 from 0.118859 to 0.119178. It used the modulus `l_3` of

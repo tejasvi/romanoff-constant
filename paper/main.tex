@@ -1,0 +1,460 @@
+\documentclass[11pt]{amsart}
+\pdfsuppressptexinfo=-1
+\usepackage[margin=1.1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,enumitem}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\numberwithin{equation}{section}
+\setlength{\emergencystretch}{2em}
+\raggedbottom
+
+\newcommand{\lean}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\LEANVERSION}{v4.35.0-rc3}
+\newcommand{\MATHLIBCOMMIT}{c55e6e786f49}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\lcm}{\operatorname{lcm}}
+% Values. The weaker bounds \Dweak and \Dcw proved in Lean: frozen package romanoff45a/frozen_v3
+% (SHA256SUMS_R45A3), U2 and v3 audited SOUND (AUDIT_45a_v3_4fcbe189.md). Theorem 1.1: r45push/certs_u3de (U3e,
+% cert_u3e_23_37.json, checker u3e v5 7e8e7170), audited SOUND (AUDIT_45a_u3de_272b0b31.md); minimum 0.110449798661 at
+% g = 3960; the CERTIFIED line rounds up, so the text uses 0.1104497986. Theorem 1.2: certs_v4e
+% (V4e, cert_v4e_23_37.json, mu = 2268311/(5*10^11)); minimum 0.118859634629 at g = 3960 (text: 0.1188596346); the
+% certs_u3de V4d certificate (l_2, 0.118747326926) is now a test of the program.
+% \Dcw*: the audited v3 certificate, proved in Lean.
+\newcommand{\DmainE}{0.118859}% V4e, l_1
+\newcommand{\DcertE}{0.1188596346}
+\newcommand{\DmainG}{0.119178}% V4g, l_3: minimum 0.119178909685 at g = 27720 (r45push/u3f/prod_v4g_A.log)
+\newcommand{\DcertG}{0.1191789096}
+\newcommand{\Dcw}{0.117953}
+\newcommand{\Dcwcert}{0.117953196}
+\newcommand{\Dcwind}{0.117953202}
+\newcommand{\DuncondE}{0.110449}% U3e, l_1 (proved in Lean)
+\newcommand{\DuncondEcert}{0.1104497986}
+\newcommand{\DuncondG}{0.110825}% U3g, l_3: minimum 0.110825738804 at g = 27720 (r45push/u3f/prod_u3g_A.log)
+\newcommand{\DuncondGcert}{0.1108257388}
+\newcommand{\Dweak}{0.109406}
+\newcommand{\Dweakcert}{0.109406225}
+\newcommand{\Dweakind}{0.109406230}
+\newcommand{\Dweakfloor}{0.10940622}% printed 0.109406225 is rounded to nearest
+\newcommand{\Dcwfloor}{0.11795319}% printed 0.117953196
+\newcommand{\Lich}{6.7814}
+\newcommand{\Per}{360}
+\newcommand{\PerOne}{3960}
+\newcommand{\PerG}{27720}
+\newcommand{\Duncond}{\DuncondG}\newcommand{\Duncondcert}{\DuncondGcert}
+\newcommand{\Dmain}{\DmainG}\newcommand{\Dcert}{\DcertG}
+
+
+\newcommand{\PerO}{120}
+\newcommand{\Orbits}{92{,}206}
+\newcommand{\Patterns}{10{,}815{,}600}
+\newcommand{\Mu}{1.302046\cdot10^{-4}}% = nu/272 in double precision (cert_p120b_v3_6fd62e90.json: 1.3020458752176792e-4)
+\newcommand{\Modulus}{3\cdot5\cdot7\cdot11\cdot13\cdot17\cdot19\cdot23\cdot31\cdot37\cdot41\cdot73\cdot241}
+\newcommand{\ModulusO}{3\cdot5\cdot7\cdot11\cdot13\cdot17\cdot31\cdot41\cdot241}
+\newcommand{\Runtime}{about $24$ and $29$ minutes}% rel2 logs: U2 1459 s, v3 1746 s (frozen_rel2)
+\newcommand{\NprimesA}{721}
+\newcommand{\NprimesB}{3231}
+\newcommand{\ROa}{1.9352319}% R0s_low - R0_b (tails_p120_v5_2c5026cc.json): 1.93523196...
+\newcommand{\ROb}{0.0011322}% log: R0_b >= 0.001132202
+\newcommand{\Cmass}{1.959\cdot10^{-4}}% R0tail = 1.95833e-4
+\newcommand{\ZENODODOI}{10.5281/zenodo.23715955}% v11 supplement record (new version of 23609840)
+\def\RepoCommit{}
+\IfFileExists{commit.tex}{\input{commit.tex}}{}
+\newcommand{\RepoLink}{\url{https://github.com/tejasvi/romanoff-constant/tree/v11}\ifx\RepoCommit\empty\else\ (commit \texttt{\RepoCommit})\fi}
+
+\hypersetup{pdftitle={New lower bounds for Romanoff's constant},
+  pdfauthor={Tejasvi Singh Tomar}}
+
+\begin{document}
+
+\title{New lower bounds for Romanoff's constant}
+\author{Tejasvi Singh Tomar}
+\renewcommand{\urladdrname}{{\itshape ORCID}}
+\urladdr{\href{https://orcid.org/0000-0003-4668-3639}{https://orcid.org/0000-0003-4668-3639}}
+\subjclass[2020]{11P32, 11N36, 11Y16; 90C05}
+\keywords{Romanoff's theorem, primes and powers of two, Selberg sieve, Bombieri--Vinogradov theorem, linear programming, computer-assisted proof, formal verification}
+
+\begin{abstract}
+Romanoff proved in 1934 that the integers of the form $p+2^a$, with $p$ prime and $a\ge1$, have positive lower density~$d$. We prove that $d\ge\Duncond$ and, conditionally on an upper bound for prime pairs that Johnston and Trudgian derive from Lichtman's work on primes in arithmetic progressions, that $d\ge\Dmain$; the best lower bound so far was $0.10788$. The proof refines the method of Elsholtz and Schlage-Puchta, which bounds the second moment of the number of representations in each residue class modulo a fixed integer. Both bounds are certified by computer and also proved in the Lean proof assistant, with the analytic inputs as hypotheses.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}\label{sec:intro}
+
+For a positive integer $n$ let $r(n)$ be the number of pairs $(p,a)$ with $p$ prime, $a\ge1$ and $n=p+2^a$, and let
+\[
+d=\liminf_{N\to\infty}\frac1N\,\#\{n\le N:r(n)>0\}.
+\]
+Allowing $a=0$ adds the integers $p+1$, which have density $0$, so it does not change $d$. Romanoff~\cite{Rom34} proved that $d>0$. Erd\H{o}s~\cite{Erd50} and van der Corput~\cite{vdC50} showed that a positive proportion of the odd integers are not of this form. Habsieger and Roblot~\cite{HR06} showed that the upper density is less than $0.490941$. Chen, Dai and Li~\cite{CDL24} lowered this to $0.49035$, and a certificate of Yoo~\cite{Yoo26} lowers it to $0.49019$. Heuristic and numerical studies suggest a density of about $0.434$ to $0.437$~\cite{Rom83,DDDR20}.
+
+Explicit lower bounds for $d$ start from the second moment of $r(n)$. Chen and Sun~\cite{CS04} proved $d\ge0.0868$. Habsieger and Roblot~\cite{HR06} improved this to $0.0933$, Pintz~\cite{Pin06} to $0.093626$, and Habsieger and Sivak-Fischler~\cite{HSF10} to $0.0936275$. Elsholtz and Schlage-Puchta~\cite{ESP18} split the integers into residue classes modulo $2^{24}-1$, where $r(n)$ is distributed very unevenly, and proved $d\ge0.107648$. Johnston and Trudgian~\cite[footnote~2]{JT26} obtained the slightly better value $0.10788$ by repeating these computations.\footnote{They note that it is also stated at the end of page~721 of~\cite{ESP18}.} Under the bound~\eqref{eq:JT} below, Johnston and Trudgian also obtained $0.10695$ by Pintz's method.
+
+\begin{theorem}\label{thm:uncond}
+We have $d\ge\Duncond$.
+\end{theorem}
+
+\begin{theorem}\label{thm:main}
+Assume the upper bound~\eqref{eq:JT} below for the number of prime pairs with a given difference. Then $d\ge\Dmain$.
+\end{theorem}
+
+Johnston and Trudgian~\cite[Proposition~2]{JT26} deduce~\eqref{eq:JT} from Lichtman's Theorems~1.2 and~1.7 of~\cite{Lic23}. Both papers are preprints; Theorem~\ref{thm:main} uses them only through~\eqref{eq:JT}, and Theorem~\ref{thm:uncond} uses neither them nor~\eqref{eq:JT}. With the sieve weights of Wu~\cite{Wu04} in place of the constant $8$ in~\eqref{eq:ESP}, the method of Elsholtz and Schlage-Puchta would give $0.11011$, but this extension of Wu's work has not been checked, and Elsholtz and Schlage-Puchta did not state it as a theorem~\cite[Section~4.2 and footnote~6]{JT26}. Theorem~\ref{thm:uncond} exceeds this value, although neither of our results uses Wu's weights.
+
+\subsection*{The method}
+In the second-moment method one bounds $\sum_{n\le N}r(n)^2$ from above. The main term counts the pairs $p_1+2^{a_1}=p_2+2^{a_2}$ with $a_1\ne a_2$. For a fixed shift $h=2^{a_2}-2^{a_1}$ this is a count of prime pairs $p_1-p_2=h$, which the Selberg sieve with the Bombieri--Vinogradov theorem bounds by four times the Hardy--Littlewood prediction (the constant $8$ in~\eqref{eq:ESP} below, where the prediction has the constant~$2$). Elsholtz and Schlage-Puchta observed that the same bound holds with a congruence condition on $p_2$ modulo a fixed $l$, so that the second moment can be bounded in each residue class modulo $l$ separately. Since the classes in which $r(n)$ is often large carry most of the pairs, the resulting bound for $d$ is much better. Theorem~\ref{thm:uncond} is this method with the modulus $l_3=29\cdot43\cdot l_1$, where $l_1=\Modulus$, for which the period of $2^a$ is $\PerG$ instead of $24$, and with sharper bounds for the singular series. For the part of the singular series that these bounds leave out we know only an upper bound for its total, not how it is distributed over the divisors of the period, and we take the worst case over all such distributions (Section~\ref{sec:lp}).
+
+For prime pairs without a congruence condition, the bound~\eqref{eq:JT} below replaces four times the prediction by $3.3907$ times the prediction. Johnston and Trudgian observed that their argument does not give the same constant with a congruence condition modulo $l$: sifting $p_2+h$ over $p_2\equiv k\pmod l$ needs residues that depend on the sifting modulus, but Lichtman's estimate allows only one residue for all moduli. For Theorem~\ref{thm:main}, with the same modulus, we therefore use the constant $8$ in every class and~\eqref{eq:JT} only for the total over all classes; both bounds apply to the same pair counts for each large $N$. Roughly speaking, since no class can then hold more than $8/\Lich\approx1.18$ times its share of the total, the worst allocation of the pairs to the classes gives a bound well above the one obtained with the constant $8$ alone. Since Pintz's function is a maximum of linear functions, this worst case is the minimum of a linear program, which we bound from below by Lagrangian duality (Section~\ref{sec:lp}).
+
+\subsection*{Organization}
+Section~\ref{sec:inputs} states the analytic inputs, Section~\ref{sec:moments} bounds the second moments in the residue classes, and Section~\ref{sec:lp} reduces the bound for $d$ to a linear program and proves the two theorems with the bounds for the singular series of Section~\ref{sec:series}. Section~\ref{sec:dep} discusses how the bound depends on the two sieve constants. Appendix~\ref{sec:check} describes the computation and the programs that check the certificates, and Appendix~\ref{sec:lean} the formal proofs in Lean.
+
+\section{Inputs}\label{sec:inputs}
+
+Throughout, $p$ denotes a prime, $l$ a fixed odd squarefree integer, $\varphi$ Euler's function, and
+\[
+C_0=\prod_{p>2}\Bigl(1-\frac1{(p-1)^2}\Bigr)=0.66016\ldots,\qquad S(h)=\prod_{p\mid h,\ p>2}\frac{p-1}{p-2}.
+\]
+For odd squarefree $m$ put $f(m)=\prod_{p\mid m}(p-2)^{-1}$, so that $S(h)=\sum f(m)$ over the odd squarefree divisors $m$ of $h$, and let $o_m$ be the multiplicative order of $2$ modulo $m$. For $N\ge1$, an integer $h$ with $0<|h|<N$ and an integer $k$ put
+\begin{align*}
+R(N,h)&=\#\{(p_1,p_2):p_1,p_2\le N,\ p_1-p_2=h\},\\
+R(N,h,k,l)&=\#\{(p_1,p_2):p_1,p_2\le N,\ p_2\equiv k\ (\mathrm{mod}\ l),\ p_1-p_2=h\}.
+\end{align*}
+
+\emph{The per-class bound.} Johnston and Trudgian~\cite[Section~4.2]{JT26} quote from~\cite[(28)]{ESP18} the following consequence of the Selberg sieve and the Bombieri--Vinogradov theorem~\cite{BD66,HR74}. We use it in the form they state. For every $\varepsilon>0$ there is $N_0(\varepsilon,l)$ such that for all $N\ge N_0$, all $0<h<N$ and all $k$ with $(k,l)=1$,
+\begin{equation}\label{eq:ESP}
+R(N,h,k,l)\le(8+\varepsilon)\,\frac{C_0N}{\varphi(l)\log^2N}\prod_{p\mid lh,\ p>2}\frac{p-1}{p-2}.
+\end{equation}
+For $l=1$ this is the classical upper bound for prime pairs. The congruence condition changes the moduli in the Bombieri--Vinogradov theorem from $d$ to $dl$, with a residue that depends on $d$, which the maximum over the residues in that theorem allows. Since $R(N,h,k,l)=R(N,-h,k+h,l)$ and the right-hand side of~\eqref{eq:ESP} depends only on $|h|$, the bound~\eqref{eq:ESP} also holds for $-N<h<0$ if $(k+h,l)=1$.
+
+\emph{The total bound.} Johnston and Trudgian~\cite[Proposition~2]{JT26} deduce from Theorems~1.2 and~1.7 of~\cite{Lic23} that for every $\varepsilon>0$ there is $N_1(\varepsilon)$ such that for all $N\ge N_1$ and all $0<|h|<N$,
+\begin{equation}\label{eq:JT}
+R(N,h)\le(\Lich+\varepsilon)\,\frac{C_0N}{\log^2N}\,S(h).
+\end{equation}
+They state it for $h>0$; the case $h<0$ follows since $R(N,-h)=R(N,h)$.
+
+For fixed even $h\ne0$ the Hardy--Littlewood conjecture predicts $R(N,h)\sim2C_0NS(h)/\log^2N$. The corresponding prediction for $R(N,h,k,l)$, when $k$ and $k+h$ are coprime to $l$, is the right-hand side of~\eqref{eq:ESP} with $2$ in place of $8+\varepsilon$. So~\eqref{eq:ESP} is four times the prediction, and~\eqref{eq:JT} is $3.3907$ times the prediction.
+
+\emph{Further inputs.} We use the prime number theorem in progressions to the fixed modulus $l$, the bound
+\begin{equation}\label{eq:R0}
+R_0:=\sum_{m\ \text{odd squarefree}}\frac{f(m)}{o_m}<1.93656
+\end{equation}
+which follows from Pintz's bound $C_0R_0<1.2784421041$~\cite[Lemma~2$''$]{Pin06} and $C_0>0.6601618158$, as stated in~\cite[p.~55]{PT15} (see also~\cite[(17)]{JT26}), and the following inequality of Pintz~\cite[Lemma~4$'$]{Pin06}.
+
+\begin{lemma}\label{lem:pintz}
+Let $b_1,\dots,b_K\ge0$ be integers with $\sum b_i=M>0$ and $\sum b_i^2\le DM$. Then $\#\{i:b_i>0\}\ge M\psi(D)$, where
+\[
+\psi(D)=\max_{j\ge1}\frac{2j+1-D}{j(j+1)}.
+\]
+\end{lemma}
+
+\begin{proof}
+For integers $b\ge1$ and $j\ge1$ we have $(b-j)(b-j-1)\ge0$, that is, $b^2\ge(2j+1)b-j(j+1)$. So $b^2\ge(2j+1)b-j(j+1)\,\mathbf 1_{b>0}$ for all integers $b\ge0$, with equality for $b=0$. Summing over $i$ gives $DM\ge(2j+1)M-j(j+1)\#\{i:b_i>0\}$.
+\end{proof}
+
+On $[1,\infty)$ the function $\psi$ is the piecewise linear interpolation of $1/D$ at the positive integers. It is convex and decreasing there.
+
+\section{Moments in residue classes}\label{sec:moments}
+
+Let $P$ be the order of $2$ modulo $l$, so that $2^a\bmod l$ depends only on $a\bmod P$. For a residue $k\bmod l$ let
+\[
+U_k=\{r\in\mathbb Z/P\mathbb Z:(k-2^r,l)=1\},\qquad s_k=|U_k|.
+\]
+Let $L=\lfloor\log_2N\rfloor$. Throughout this section $k$ is fixed and $N\to\infty$.
+
+\begin{lemma}\label{lem:first}
+$\sum_{n\le N,\ n\equiv k}r(n)=\bigl(s_k/(P\varphi(l)\log2)+o(1)\bigr)N$, where $n\equiv k$ means $n\equiv k\pmod l$.
+\end{lemma}
+
+\begin{proof}
+The sum counts the pairs $(p,a)$ with $a\le L$ and $p\le N-2^a$, $p\equiv k-2^a\pmod l$. If $a\bmod P\notin U_k$, there are $O(1)$ such primes. Otherwise the prime number theorem in progressions gives $(1+o(1))(N-2^a)/(\varphi(l)\log N)$ uniformly for $a\le L-\log_2L$. The remaining $O(\log L)$ values of $a$ contribute $O(N\log L/\log N)=o(N)$. Summing over the $(s_k/P+o(1))L$ admissible $a$ gives the claim.
+\end{proof}
+
+The second moment is $\sum_{n\le N,\,n\equiv k}r(n)^2=\sum_{n\le N,\,n\equiv k}r(n)+\sum_{a_1\ne a_2}X_k(a_1,a_2)$, where for $1\le a_1,a_2\le L$ with $a_1\ne a_2$ and $h=2^{a_2}-2^{a_1}$,
+\[
+X_k(a_1,a_2)=\#\{p_2\le N-2^{a_2}:p_2\equiv k-2^{a_2}\ (\mathrm{mod}\ l),\ p_2+h\ \text{prime}\}
+\]
+counts the pairs of representations $p_1+2^{a_1}=p_2+2^{a_2}\le N$ in the class of $k$. It is $O(1)$ unless $a_1\bmod P$ and $a_2\bmod P$ lie in $U_k$. Both primes of such a pair are at most $N$, and $0<|h|<N$, so
+\begin{equation}\label{eq:twobounds}
+X_k(a_1,a_2)\le R(N,h,k-2^{a_2},l),\qquad\sum_{k\bmod l}X_k(a_1,a_2)\le R(N,h).
+\end{equation}
+If $a_1\bmod P$ and $a_2\bmod P$ lie in $U_k$, then $k-2^{a_2}$ and $k-2^{a_2}+h=k-2^{a_1}$ are coprime to $l$, so~\eqref{eq:ESP} bounds the first right-hand side, for either sign of $h$. The bound~\eqref{eq:JT} bounds the second.
+
+We group the pairs $(a_1,a_2)$ by $G=(a_1\bmod P,a_2\bmod P)$ and write $c=c(G)=a_2-a_1\bmod P$. For an odd prime $p$ we have $p\mid h$ exactly when $\ord_p(2)$ divides $a_2-a_1$. Hence $S(h)=Q(c)S'(h)$, where
+\[
+Q(c)=\prod_{p\mid l,\ \ord_p(2)\mid c}\frac{p-1}{p-2},\qquad S'(h)=\prod_{p\mid h,\ p\nmid2l}\frac{p-1}{p-2},
+\]
+and the product in~\eqref{eq:ESP} equals $P_lS'(h)$ with $P_l=\prod_{p\mid l}(p-1)/(p-2)$.
+
+\begin{lemma}\label{lem:mean}
+For $r_1,r_2\in\mathbb Z/P\mathbb Z$ and $c=r_2-r_1$,
+\[
+\sum_{\substack{1\le a_1\ne a_2\le L\\a_1\equiv r_1,\ a_2\equiv r_2}}S'(2^{a_2}-2^{a_1})\le\Bigl(\frac LP+1\Bigr)\frac LP\,T(c)+O(L\log L),
+\]
+with
+\[
+T(c)=\sum_{\substack{m\ \text{odd squarefree}\\(m,l)=1}}f(m)\,[g_m\mid c]\,\frac{g_m}{o_m},
+\]
+where the congruences are modulo $P$, $g_m=\gcd(o_m,P)$, and $[\cdot]$ is $1$ if the condition holds and $0$ otherwise.
+\end{lemma}
+
+\begin{proof}
+We have $S'(2^{a_2}-2^{a_1})=\sum f(m)$ over the squarefree $m$ with $(m,2l)=1$ and $m\mid2^{|a_2-a_1|}-1$, that is, $o_m\mid a_2-a_1$. For fixed $m$, the conditions $a_2-a_1\equiv c\pmod P$ and $o_m\mid a_2-a_1$ are compatible only if $g_m\mid c$, and then they fix $a_2$ modulo $\lcm(P,o_m)=Po_m/g_m$ for given $a_1$. Since $0<|a_2-a_1|<L$, there is no such pair if $o_m\ge L$. So for each of the at most $L/P+1$ values of $a_1$ there are at most $Lg_m/(Po_m)+[o_m<L]$ values of $a_2$. Summing over $m$ gives the main term and an error at most $(L/P+1)\sum_{o_m<L}f(m)$. The primes $p$ with $\ord_p(2)<L$ divide $M_L=\prod_{t<L}(2^t-1)$, so
+\[
+\sum_{o_m<L}f(m)\le\prod_{p\mid M_L}\frac{p-1}{p-2}\le\frac1{C_0}\,\frac{M_L}{\varphi(M_L)}\ll\log\log M_L\ll\log L.\qedhere
+\]
+\end{proof}
+
+\section{The linear program}\label{sec:lp}
+
+We measure counts in the unit $N/(P\varphi(l)\log2)$. For a class $k$ with $s_k>0$ and a group $G=(r_1,r_2)\in U_k\times U_k$, let $Y_k(G)$ be the sum of $X_k(a_1,a_2)$ over the pairs in $G$, in this unit, and let $Y_k=\sum_GY_k(G)$. Put $\kappa=C_0P_l/(P\log2)$, and let $A_G$ be the number of classes $k\bmod l$ with $r_1,r_2\in U_k$. A class $k$ is counted in $A_G$ exactly when, for every $p\mid l$, the residue $k\bmod p$ avoids $2^{r_1}$ and $2^{r_2}$, which coincide modulo $p$ when $\ord_p(2)\mid c$. Hence
+\[
+A_G=\varphi(l)\prod_{p\mid l,\ \ord_p(2)\nmid c}\frac{p-2}{p-1},\qquad P_l\,\frac{A_G}{\varphi(l)}=Q(c).
+\]
+
+\begin{lemma}\label{lem:constraints}
+Let $T^+(c)\ge T(c)$ for all $c$, and let $\delta>0$. For all large $N$, all $k$ with $s_k>0$ and all $G\in U_k\times U_k$,
+\begin{equation}\label{eq:cap}
+Y_k(G)\le(8+\delta)\,\kappa\,T^+(c)
+\end{equation}
+and
+\begin{equation}\label{eq:count}
+\frac1N\,\#\{n\le N:n\equiv k,\ r(n)>0\}\ge\frac{s_k-\delta}{P\varphi(l)\log2}\,\psi\Bigl(1+\frac{Y_k}{s_k}+\delta\Bigr).
+\end{equation}
+If~\eqref{eq:JT} holds, then for all large $N$ and all $G$ also
+\begin{equation}\label{eq:budget}
+\sum_{k:\,G\in U_k\times U_k}Y_k(G)\le(\Lich+\delta)\,\kappa\,T^+(c)\,A_G.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+By~\eqref{eq:twobounds}, \eqref{eq:ESP} and Lemma~\ref{lem:mean}, the sum of $X_k(a_1,a_2)$ over the pairs in $G$ is at most $(8+\varepsilon)C_0NP_l(\varphi(l)\log^2N)^{-1}\bigl((L/P)^2T(c)+O(L\log L)\bigr)$. Since $L^2/\log^2N\to1/\log^22$ and $T(c)\ge1$ (the term $m=1$), this is at most $(8+\delta)\kappa T(c)$ in the unit $N/(P\varphi(l)\log2)$ for large $N$. For~\eqref{eq:count} we apply Lemma~\ref{lem:pintz} to the numbers $r(n)$, $n\le N$, $n\equiv k$. By Lemma~\ref{lem:first} their sum is $s_k+o(1)$ units. Their sum of squares exceeds their sum by the sum of $X_k(a_1,a_2)$ over all $a_1\ne a_2$, which is at most $Y_k+o(1)$ units, since the pairs with $a_1\bmod P$ or $a_2\bmod P$ outside $U_k$ contribute $O(L^2)=o(N)$. Since $\psi$ is decreasing, \eqref{eq:count} follows. Finally, in the same way as for~\eqref{eq:cap}, the bounds~\eqref{eq:twobounds}, \eqref{eq:JT} and Lemma~\ref{lem:mean} bound the left-hand side of~\eqref{eq:budget} by $(\Lich+\delta)C_0Q(c)T(c)\varphi(l)/(P\log2)$, which is the right-hand side of~\eqref{eq:budget} since $Q(c)\varphi(l)=P_lA_G$.
+\end{proof}
+
+Put $\nu=(l/\varphi(l))/(P\log2)$ and
+\begin{equation}\label{eq:objective}
+F(Y)=\frac\nu l\sum_{k:\,s_k>0}s_k\,\psi\Bigl(1+\frac{Y_k}{s_k}\Bigr).
+\end{equation}
+Let $V_8$ be the minimum of $F$ over all $Y\ge0$ that satisfy~\eqref{eq:cap} with $\delta=0$, and let $V$ be its minimum over all $Y\ge0$ that satisfy~\eqref{eq:cap} and~\eqref{eq:budget} with $\delta=0$; we call the constraints~\eqref{eq:cap} the caps and~\eqref{eq:budget} the budget rows. Summing~\eqref{eq:count} over the classes $k$ with $s_k>0$ shows that $d\ge V_8$, and that $d\ge V$ if~\eqref{eq:JT} holds. Indeed, for large $N$ the counts $Y_k(G)$ satisfy the constraints of Lemma~\ref{lem:constraints} with $\delta$, and dividing them by $1+\delta$ gives a point that satisfies them with $\delta=0$. Since $\psi$ is $\frac12$-Lipschitz and the $Y_k$ are bounded by~\eqref{eq:cap}, this division, the replacement of $s_k-\delta$ by $s_k$ and the removal of the $+\delta$ in the argument of $\psi$ change the sum of the right-hand sides of~\eqref{eq:count} by $O(\delta)$. So $d\ge V_8-O(\delta)$ for every $\delta>0$, and in the same way $d\ge V-O(\delta)$. Since the $Y_k$ are bounded, only finitely many $j$ in the definition of $\psi$ matter, so $V_8$ and $V$ are values of linear programs.
+
+\emph{Reduction to rotation orbits.} We call $U_k$ the pattern of the class $k$. For a rotation orbit $u$ of nonempty patterns $U\subset\mathbb Z/P\mathbb Z$, let $K_u$ be the set of classes $k$ with $U_k\in u$, and put $m_u=|K_u|$, $\rho_u=m_u/l$, $s_u=|U|$, $w_u=\nu \rho_us_u$ and $n_u(c)=\#\{r\in U:r+c\in U\}$. These do not depend on the choice of $U\in u$. For a feasible point $Y$ put
+\[
+y_u(c)=\frac1{m_u}\sum_{k\in K_u}\ \sum_{G\in U_k\times U_k,\ c(G)=c}Y_k(G).
+\]
+For each $k\in K_u$ there are $n_u(c)$ groups $G\in U_k\times U_k$ with $c(G)=c$, so~\eqref{eq:cap} gives $0\le y_u(c)\le y_u^{\max}(c)$ with $y_u^{\max}(c)=8\kappa\,n_u(c)\,T^+(c)$. Summing~\eqref{eq:budget} over the $P$ groups with difference $c$ and dividing by $l$ gives $\sum_u\rho_u\,y_u(c)\le\Lich\,\kappa\,T^+(c)\,\mathcal N(c)$, where
+\[
+\mathcal N(c)=\frac1l\sum_{c(G)=c}A_G=\sum_u\rho_u\,n_u(c).
+\]
+Since $\psi$ is convex, Jensen's inequality gives $\sum_{k\in K_u}s_u\psi(1+Y_k/s_u)\ge m_us_u\psi\bigl(1+\sum_cy_u(c)/s_u\bigr)$. Hence $V$ is at least the minimum of
+\[
+\sum_uw_u\,\psi\Bigl(1+\frac{\sum_cy_u(c)}{s_u}\Bigr)
+\]
+subject to
+\[
+0\le y_u(c)\le y_u^{\max}(c),\qquad\sum_u\rho_u\,y_u(c)\le\Lich\,\kappa\,T^+(c)\,\mathcal N(c),
+\]
+and $V_8$ is at least the minimum subject to the first family of constraints alone.
+
+\emph{A bound affine in the uncomputed part.} For Theorem~\ref{thm:uncond} we use no budget rows, and we take into account that a part of the singular series is known only through an upper bound for its total. Let $\vartheta\ge0$, and let $\mathcal S$ be the simplex of the vectors $\alpha=(\alpha_g)$, indexed by the positive divisors $g$ of $P$, with $\alpha_g\ge0$ and $\sum_g\alpha_g\le\vartheta$. Its vertices are $0$ and the points $\vartheta e_g$.
+
+\begin{proposition}\label{prop:affine}
+Let $T_0$ be a function on $\mathbb Z/P\mathbb Z$, and suppose that there is an $\alpha\in\mathcal S$ with $T(c)\le T_0(c)+\sum_{g\mid P,\,g\mid c}g\,\alpha_g$ for all $c$. For each class $k$ with $s_k>0$ let $j_k\ge1$ be an integer, and put
+\[
+\mathcal Q_k=\sum_{r_1,r_2\in U_k}T_0(r_2-r_1),\qquad S_{k,g}=\#\{(r_1,r_2)\in U_k\times U_k:r_1\equiv r_2\ (\mathrm{mod}\ g)\}.
+\]
+Then $d\ge\min_\beta M(\beta)$, where $\beta$ runs through the vertices of $\mathcal S$ and
+\[
+M(\beta)=\frac\nu l\sum_{k:\,s_k>0}\biggl(\frac{2s_k}{j_k+1}-\frac{8\kappa}{j_k(j_k+1)}\Bigl(\mathcal Q_k+\sum_{g\mid P}g\,\beta_g\,S_{k,g}\Bigr)\biggr).
+\]
+\end{proposition}
+
+\begin{proof}
+The function $T^+(c)=T_0(c)+\sum_{g\mid c}g\alpha_g$ is an upper bound for $T$, so $d\ge V_8$ for the caps~\eqref{eq:cap} with this $T^+$. Since $\psi$ is decreasing, $F$ is smallest when every $Y_k(G)$ equals its cap, and then $Y_k=8\kappa\bigl(\mathcal Q_k+\sum_gg\alpha_gS_{k,g}\bigr)$, because $g\mid c(G)$ exactly when the two entries of $G$ are congruent modulo $g$. By its definition, $\psi(D)\ge(2j+1-D)/(j(j+1))$ for every integer $j\ge1$. With $D=1+Y_k/s_k$ and $j=j_k$ this gives $V_8\ge M(\alpha)$. Since $M$ is affine, its minimum over $\mathcal S$ is attained at a vertex.
+\end{proof}
+
+The choice of the $j_k$ affects only the quality of the bound. On $[j,j+1]$ the linear function in the proof equals $\psi$, so $j_k=\lfloor1+Y_k/s_k\rfloor$ is the best choice for a given $\alpha$. The numbers $s_k$, $\mathcal Q_k$ and $S_{k,g}$ depend only on the rotation orbit of $U_k$. In Section~\ref{sec:series} we show that the hypothesis of Proposition~\ref{prop:affine} holds with $\vartheta=1.93656-R_{0,\mathrm a}^--R_{0,\mathrm b}^-$ for every upper bound $T_0$ of $T_{\mathrm a}+T_{\mathrm b}$, and we define the function $T_0$ that we use. The prime factors of $l_3$ beyond those of $2^{24}-1$ and $11$ and $31$, namely $19$, $23$, $29$, $37$, $41$, $43$ and $73$, were chosen with the help of floating-point models of the bound, which are in the archive (see Data availability); $29$ and $43$, modulo which $2$ has the orders $28$ and $14$, bring the factor $7$ into the period. For $l=l_3$, whose period is $P=\PerG$, $P$ has $96$ positive divisors, and the smallest of the $97$ values $M(\beta)$ is at least $\DuncondGcert$, at $\beta=\vartheta e_{27720}$ (Appendix~\ref{sec:check}). This proves Theorem~\ref{thm:uncond}.
+
+For Theorem~\ref{thm:main} we add the budget rows~\eqref{eq:budget}, summed over all groups $G$, with one multiplier $\mu$, and we relax the caps of each class with a multiplier $\lambda_k$.
+
+\begin{proposition}\label{prop:cond}
+Assume~\eqref{eq:JT}, and let $T_0$, $\alpha$, $\mathcal Q_k$ and $S_{k,g}$ be as in Proposition~\ref{prop:affine}. Let $\mu\ge0$, and for each class $k$ with $s_k>0$ let $\lambda_k\ge0$ with $\mu+\lambda_k>0$. Put $h_k=\min_{i\ge1}\bigl(\nu/i+(\mu+\lambda_k)(i-1)\bigr)$. Then $d\ge\min_\beta M_\mu(\beta)$, where $\beta$ runs through the vertices of $\mathcal S$ and
+\[
+M_\mu(\beta)=\frac1l\sum_{k:\,s_k>0}\Bigl(s_kh_k-(8\lambda_k+\Lich\mu)\,\kappa\Bigl(\mathcal Q_k+\sum_{g\mid P}g\,\beta_g\,S_{k,g}\Bigr)\Bigr).
+\]
+\end{proposition}
+
+\begin{proof}
+Let $T^+$ be as in the proof of Proposition~\ref{prop:affine} and $X_k=\mathcal Q_k+\sum_gg\alpha_gS_{k,g}$, so that the caps~\eqref{eq:cap} give $Y_k\le8\kappa X_k$. Since $A_G$ is the number of classes $k$ with $G\in U_k\times U_k$, the sum of~\eqref{eq:budget} over all $G$ is $\sum_kY_k\le\Lich\,\kappa\sum_kX_k$. For every $Y$ that satisfies both constraints, therefore,
+\[
+F(Y)\ge F(Y)+\frac\mu l\Bigl(\sum_kY_k-\Lich\,\kappa\sum_kX_k\Bigr)+\frac1l\sum_k\lambda_k\bigl(Y_k-8\kappa X_k\bigr).
+\]
+With $D_k=1+Y_k/s_k$, the right-hand side is the sum over $k$ of $l^{-1}s_k\bigl(\nu\psi(D_k)+(\mu+\lambda_k)(D_k-1)\bigr)-l^{-1}(8\lambda_k+\Lich\mu)\kappa X_k$. On $[1,\infty)$ the function $\nu\psi(D)+(\mu+\lambda_k)(D-1)$ is convex and piecewise linear with breakpoints at the integers, so its minimum is attained at an integer, and it is $h_k$. Hence $V\ge M_\mu(\alpha)$. Since $M_\mu$ is affine, its minimum over $\mathcal S$ is attained at a vertex.
+\end{proof}
+
+With $\mu=0$ and $\lambda_k=\nu/(j_k(j_k+1))$ we have $h_k=2\nu/(j_k+1)$, and $M_0$ is the function $M$ of Proposition~\ref{prop:affine}. For Theorem~\ref{thm:main} we take $l=l_3$ again, $\mu=6.87217\cdot10^{-7}$, about $3.676\cdot10^{-3}\nu$, and $\lambda_k=\max\bigl(0,\nu^-/(j_k(j_k+1))-\mu\bigr)$, where $\nu^-$ is the lower bound for $\nu$ that the computation uses, with the same $j_k$ as for Theorem~\ref{thm:uncond}, chosen at $\alpha=\vartheta e_{27720}$ (Appendix~\ref{sec:check}). The smallest of the $97$ values $M_\mu(\beta)$ is at least $\DcertG$, at $\beta=\vartheta e_{27720}$. This proves Theorem~\ref{thm:main}. Table~\ref{tab:bounds} summarizes the bounds for the three moduli.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{The lower bounds for $d$ given by the certificates for the three moduli. Theorems~\ref{thm:uncond} and~\ref{thm:main}, the two bounds for $l_0$ and the unconditional bound for $l_1$ are also proved in Lean (Appendix~\ref{sec:lean}).}\label{tab:bounds}
+\begin{tabular}{@{}lrll@{}}
+\toprule
+Modulus & Period & Bound & Bound under~\eqref{eq:JT}\\
+\midrule
+$l_0$ & $\PerO$ & $\Dweak$ & $\Dcw$\\
+$l_1$ & $\PerOne$ & $\DuncondE$ & $\DmainE$\\
+$l_3$ & $\PerG$ & $\Duncond$ & $\Dmain$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In both theorems the smallest value is at $\beta=\vartheta e_P$. In fact $M(\beta)\ge M(\vartheta e_P)$ and $M_\mu(\beta)\ge M_\mu(\vartheta e_P)$ for every $\beta\in\mathcal S$. Each class modulo a divisor $g$ of $P$ contains $P/g$ residues modulo $P$, so $gS_{k,g}\le Ps_k=PS_{k,P}$. Hence $\sum_gg\beta_gS_{k,g}\le\vartheta Ps_k$ for $\beta\in\mathcal S$, with equality at $\beta=\vartheta e_P$, and this sum enters $M(\beta)$ and $M_\mu(\beta)$ with a nonpositive coefficient. The programs of Appendix~\ref{sec:check} nevertheless evaluate all vertices.
+
+In the checker, $\kappa$ is replaced by an upper bound and $\nu$ by a lower bound, computed from the bounds for $C_0$ and $\log2$ in Appendix~\ref{sec:check}. This is allowed, since the values $M(\beta)$, when they are positive, do not increase when $\kappa$ or $T^+$ increases and do not decrease when $\nu$ increases. The same holds for the values $M_\mu(\beta)$ with fixed $\lambda_k$, and for the right-hand side of~\eqref{eq:lagrange} below.
+
+\emph{The smaller moduli.} For $l=l_1$, whose period is $\PerOne$, the smallest of the $49$ values $M(\beta)$ is at least $\DuncondEcert$, at $\beta=\vartheta e_{3960}$, which gives the weaker bound $d\ge\DuncondE$. For the modulus $l_0=\ModulusO$, whose period is $\PerO$, there are $\Patterns$ nonempty patterns, in $\Orbits$ rotation orbits, and one empty pattern, and we bound the relaxed program directly. For multipliers $\mu_c\ge0$, weak duality for the Lagrangian relaxation of the budget rows gives
+\begin{equation}\label{eq:lagrange}
+V\ge\sum_u\min_{0\le y\le y^{\max}_u}\Bigl(w_u\,\psi\Bigl(1+\frac{\sum_cy(c)}{s_u}\Bigr)+\rho_u\sum_c\mu_c\,y(c)\Bigr)-\sum_c\mu_c\,\Lich\,\kappa\,T^+(c)\,\mathcal N(c).
+\end{equation}
+For a fixed total $z=\sum_cy(c)$ the linear part is smallest when the $y(c)$ with the smallest $\mu_c$ are filled first. So each inner minimum is the minimum of a convex piecewise linear function of $z$, which is attained at one of its breakpoints and can be computed exactly.
+
+Without budget rows, the same bound with all $\mu_c=0$ holds for $V_8$. Since $\psi$ is decreasing, each inner minimum is then attained at $y=y^{\max}_u$, so every class carries its full cap, and
+\[
+d\ge V_8\ge\sum_uw_u\,\psi\Bigl(1+\frac{\sum_cy^{\max}_u(c)}{s_u}\Bigr)\ge\Dweakfloor
+\]
+for $l=l_0$ and the bounds $T^+$ of Section~\ref{sec:series}.
+
+For the same modulus we take all $\mu_c$ equal to $\mu^*\approx1.302046\cdot10^{-4}$ (the certificate gives it exactly), found by maximizing the right-hand side of~\eqref{eq:lagrange} over a common value of the $\mu_c$. If~\eqref{eq:JT} holds, then $d\ge V$, and~\eqref{eq:lagrange} gives $V\ge\Dcwfloor$. Since~\eqref{eq:lagrange} holds for all $\mu\ge0$, the bound does not depend on how the multipliers were found. The value $\mu^*$ exceeds $\nu/272$ by a relative $2\cdot10^{-12}$, where $1/272=1/(16\cdot17)$ is the slope of $-\psi$ on $[16,17]$. So with these multipliers the orbits with $1+\sum_cy_u^{\max}(c)/s_u\le16$ are filled to their cap, and the others stop at $1+z/s_u=16$.
+
+\section{The singular series}\label{sec:series}
+
+We need upper bounds $T^+(c)$ for the sums $T(c)$ of Lemma~\ref{lem:mean}. Let $\mathcal A$ be the set of the primes $p$ with $\ord_p(2)\le300$; there are $\NprimesA$ of them. They divide the cyclotomic values $\Phi_t(2)$, $t\le300$, whose complete factorizations are known. Let $\mathcal M$ be the set of the $\NprimesB$ primes $q<10^{100}$ with $300<\ord_q(2)\le1200$ that occur in the known factorizations of $\Phi_t(2)$, $301\le t\le1200$. We split the odd squarefree $m$ into three classes:
+\begin{enumerate}[label=(\alph*)]
+\item every prime factor of $m$ lies in $\mathcal A$;
+\item $m=m'q$, where $m'$ is in class (a) and $q\in\mathcal M$;
+\item all other $m$.
+\end{enumerate}
+We do not need $\mathcal M$ to contain all primes of these orders: a missing prime only moves terms from class (b) to class (c).
+
+Let $T_{\mathrm a}(c)$, $T_{\mathrm b}(c)$ and $T_{\mathrm c}(c)$ be the parts of $T(c)$ from the three classes, and $R_{0,\mathrm a}$, $R_{0,\mathrm b}$, $R_{0,\mathrm c}$ those of $R_0$. The sums $T$ run over the $m$ coprime to $l$, and the sums $R_0$ over all odd squarefree $m$. For the $m$ that contribute to $T_{\mathrm c}(c)$ we have $g_m\mid c$ and $g_m\mid P$, so $g_m\le\gcd(c,P)$, and therefore
+\[
+T_{\mathrm c}(c)\le\gcd(c,P)\,R_{0,\mathrm c}\le\gcd(c,P)\bigl(1.93656-R_{0,\mathrm a}^--R_{0,\mathrm b}^-\bigr),
+\]
+where $R_{0,\mathrm a}^-$ and $R_{0,\mathrm b}^-$ are lower bounds for $R_{0,\mathrm a}$ and $R_{0,\mathrm b}$.
+
+For Theorems~\ref{thm:uncond} and~\ref{thm:main} we keep more information about class (c). Grouping the terms of $T_{\mathrm c}(c)$ by the value of $g_m$, a divisor of $P$, gives
+\[
+T_{\mathrm c}(c)=\sum_{g\mid P,\ g\mid c}g\,\alpha_g,\qquad\alpha_g=\sum_{\substack{m\ \text{in class (c)}\\(m,l)=1,\ g_m=g}}\frac{f(m)}{o_m}.
+\]
+The $\alpha_g$ are nonnegative, and their sum is at most $R_{0,\mathrm c}\le\vartheta:=1.93656-R_{0,\mathrm a}^--R_{0,\mathrm b}^-$. So the hypothesis of Proposition~\ref{prop:affine} holds for every upper bound $T_0$ of $T_{\mathrm a}+T_{\mathrm b}$. For a single $c$, the largest value of this sum over $\mathcal S$ is $\gcd(c,P)\vartheta$, the bound above; Proposition~\ref{prop:affine} uses that the same $\alpha$ serves for all $c$.
+
+We compute $T_{\mathrm a}(c)$ and $R_{0,\mathrm a}$ by a dynamic program over the primes of $\mathcal A$ (for $T_{\mathrm a}$ only those not dividing $l$) that keeps, for each value of the least common multiple of the orders, the sum of $f(m)$, in ball arithmetic. A branch is stopped when this multiple exceeds $3\cdot10^6$. For $R_{0,\mathrm a}$ the stopped branches are dropped, which only lowers the bound. For $T_{\mathrm a}(c)$ a term with $o_m>3\cdot10^6$ is at most $f(m)P/(3\cdot10^6)$, since $g_m\le P$. So the stopped branches and all their extensions contribute at most
+\[
+E=\Delta\prod_{p\in\mathcal A,\ p\nmid l}\Bigl(1+\frac1{p-2}\Bigr)\frac P{3\cdot10^6},
+\]
+where $\Delta$ is the sum of $f$ over the branches at the moment they are stopped, and we add $E$ to the bound for every $T_{\mathrm a}(c)$. For class (b) we have $f(m)=f(m')/(q-2)$ and $o_m=\lcm(o_{m'},\ord_q(2))$. We bound $T_{\mathrm b}(c)$ from above with the weights of the dynamic program for $m'$, adding $E\sum_{q\in\mathcal M}(q-2)^{-1}$, and $R_{0,\mathrm b}$ from below. These sums of positive terms are evaluated in floating-point arithmetic, with every weight rounded outward and a relative margin of $10^{-9}$. Each sum has fewer than $3\cdot10^6+10^3$ terms, so its relative rounding error is below $4\cdot10^{-10}$. This gives $R_{0,\mathrm a}\ge\ROa$, $R_{0,\mathrm b}\ge\ROb$, and a mass of at most $\Cmass$ for class (c). With the resulting upper bounds $T_{\mathrm a}^+(c)$ and $T_{\mathrm b}^+(c)$ we take $T^+(c)=T_{\mathrm a}^+(c)+T_{\mathrm b}^+(c)+\gcd(c,P)\vartheta$ for the two weaker bounds. For Theorems~\ref{thm:uncond} and~\ref{thm:main} we group the terms that the dynamic program keeps by the value of $g_m$, as for class (c). For each divisor $g$ of $P$ let $B_g$ be an upper bound for $g$ times the sum of $f(m)/o_m$ over the $m$ with $(m,l)=1$ and $g_m=g$ that lie in class (a) and are kept by the dynamic program, or lie in class (b) with $m'$ kept, and add $E+E\sum_{q\in\mathcal M}(q-2)^{-1}$ to $B_1$. The stopped branches and their extensions contribute at most this amount to $T_{\mathrm a}(c)+T_{\mathrm b}(c)$ for every $c$, and $B_1$ occurs in $T_0(c)=\sum_{g\mid P,\,g\mid c}B_g$ for every $c$, so $T_0$ is an upper bound for $T_{\mathrm a}+T_{\mathrm b}$. Since $g$ divides $r_2-r_1$ exactly when $r_1\equiv r_2\pmod g$, with this $T_0$ in Propositions~\ref{prop:affine} and~\ref{prop:cond} we have $\mathcal Q_k=\sum_{g\mid P}B_gS_{k,g}$.
+
+\section{Dependence on the constants}\label{sec:dep}
+
+The bound responds strongly to the constant for the total. Table~\ref{tab:dep} gives floating-point evaluations of~\eqref{eq:lagrange} for the modulus $l_0$ with equal multipliers, computed by a script in the archive, for hypothetical pairs of constants; they are not certified bounds. The first row is the certified bound $d\ge\Dcw$ of Section~\ref{sec:lp}. Johnston and Trudgian~\cite[Table~2]{JT26} list the total constant $7.8209$ as implied by the work of Wu~\cite{Wu04}; the last row assumes that this holds uniformly in the shift $h$.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{The bound for the modulus $l_0$ for other values of the two constants. Only the first row is a certified bound; the other values are floating-point evaluations.}\label{tab:dep}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Per-class constant & Total constant & Bound\\
+\midrule
+$8$ & $\Lich$ & $\Dcw$ (certified)\\
+$8$ & $6.5$ & $0.121009$\\
+$8$ & $6.0$ & $0.127623$\\
+$8$ & $4.0$ & $0.174945$\\
+$7.8209$ & $\Lich$ & $0.118891$\\
+$8$ & $7.8209$ & $0.110119$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A per-class form of~\eqref{eq:JT} would also raise the bound: with the constant~$\Lich$ for every class and for the total, the linear program of Table~\ref{tab:jt} gives $0.125340$ already for the modulus $3\cdot5\cdot7\cdot13\cdot17\cdot241$.
+
+\appendix
+\section{Computation and checks}\label{sec:check}
+
+A program in Python with python-flint~\cite{FLINT} and numpy checks a certificate, which lists the prime factors of $l$, the external constants below and the multipliers. It reads the factorizations of $\Phi_t(2)$ for $t\le300$, checks by multiplication that they are complete, and proves with FLINT that every factor is prime. It reads the known factorizations of $\Phi_t(2)$ for $301\le t\le1200$, checks that the product of the factors is $\Phi_t(2)$, and for every factor $q<10^{100}$ coprime to $t$ proves that $q$ is prime and that $\ord_q(2)=t$; it does not use the other factors. It then computes the bounds of Section~\ref{sec:series}, the patterns $U_k$, their orbits and the data of the relaxed program, and evaluates~\eqref{eq:lagrange} in exact rational arithmetic. The external inputs are the per-class constant $8$, the total constant $\Lich$ (for the conditional bounds) and the bounds
+\begin{gather*}
+C_0<0.66016181584686958,\qquad R_0<1.93656,\\
+0.693147180559945309<\log2<0.693147180559945310.
+\end{gather*}
+For $l_1$ and $l_3$ two further programs, built on the code of the first, combine the bounds of Section~\ref{sec:series} into the numbers $B_g$, rounded up, and evaluate $M(\beta)$ of Proposition~\ref{prop:affine}, or $M_\mu(\beta)$ of Proposition~\ref{prop:cond}, at all vertices of $\mathcal S$ in exact rational arithmetic, with $j_k=\lfloor1+Y_k/s_k\rfloor$ chosen in floating point at $\alpha=\vartheta e_P$. They check in exact arithmetic that the smallest value is at least the claimed bound of Table~\ref{tab:bounds}. Since $l_1>10^{15}$, they do not treat the classes one at a time; two reductions make the computation feasible.
+
+\emph{Splitting the modulus.} Write $l=l'l''$ with $l'=3\cdot5\cdot7\cdot11\cdot13\cdot17\cdot31\cdot241$, so that $l''=19\cdot23\cdot37\cdot41\cdot73$ for $l=l_1$, and write $k=(k',k'')$ by the Chinese remainder theorem. Then $U_k=U'_{k'}\cap U''_{k''}$, where $U'_{k'}$ and $U''_{k''}$ are defined with $l'$ and $l''$ in place of $l$, as subsets of $\mathbb Z/P\mathbb Z$. For a prime $p\mid l''$, a residue $k\bmod p$ that is not a power of $2$ excludes no $r$, and $k\equiv2^i\pmod p$ excludes the $r\equiv i\pmod{\ord_p(2)}$. The patterns $U'_{k'}$ have period $\PerO$; the nonempty ones fall into $7{,}870$ rotation orbits, and there is one empty pattern. If $U'_{k'}=U+t$, then $U_{(k',k'')}=(U\cap U''_{2^{-t}k''})+t$. Since $s_k$, $\mathcal Q_k$ and $S_{k,g}=\sum_{a\bmod g}|U_k\cap(a+g\mathbb Z)|^2$ are invariant under rotation, each orbit therefore contributes the number of classes $k'$ with $U'_{k'}$ in the orbit times the sum over $k''$ of the terms for $U\cap U''_{k''}$. The $o+1$ different exclusions by one prime $p\mid l''$, where $o=\ord_p(2)$, are evaluated together. If a pattern $V$ arises from a pattern $U$ by removing the elements $r\equiv i\pmod o$, then $|V\cap(a+g\mathbb Z)|=|U\cap(a+g\mathbb Z)|-|U\cap(a+g\mathbb Z)\cap(i+o\mathbb Z)|$, and the last set is empty or the intersection of $U$ with one class modulo $\lcm(g,o)$, which divides $P$. So the numbers $S_{k,g}$ for all $o+1$ exclusions follow from the counts of one pattern in the classes modulo the divisors of $P$; the program for $l_1$ uses this for the added prime that its certificate lists last.
+
+\emph{Primes whose order is divisible by $7$ or $11$.} For $l_3=29\cdot43\cdot l_1$ the period is $P=\PerG=360\cdot7\cdot11$, and the orders $14$, $28$ and $11$ of $2$ modulo $43$, $29$ and $23$ do not divide $360$, while the orders modulo the other prime factors of $l_3$ do. Writing $r$ as $(r\bmod360,r\bmod7,r\bmod11)$, the indicator function of $U_k$ is therefore a function of $r\bmod360$ times, for $q=7$ and for $q=11$, a function of $r\bmod360$ and $r\bmod q$. Since every divisor of $P$ is $g_cg_7g_{11}$ with $g_c\mid360$ and $g_q\in\{1,q\}$, the sums over $r\bmod7$ and $r\bmod11$ in $S_{k,g}$ can be evaluated in closed form. A permutation of $\mathbb Z/q\mathbb Z$ applied to $r\bmod q$ preserves every congruence modulo a divisor of $P$ and permutes the classes, so $s_k$ and $S_{k,g}$ need to be evaluated for only one combination of exclusions by $43$, $29$ and $23$ in each orbit of these permutations. The program for $l_3$ runs through the exclusions by the other added primes one at a time, and it checks that every floating-point sum that enters the bound has nonnegative integer terms and a total below $2^{53}$, so that it is exact; floating point without this guarantee only chooses the $j_k$.
+
+In cross-checks, the program for $l_3$ gives the same values as the program for $l_1$ on the certificate of $l_1$, to $12$ digits, separately written bounds for the singular series and an independently written exact evaluator of~\eqref{eq:lagrange} give the two bounds for $l_0$ to within $7\cdot10^{-9}$, and a separately written solver of the linear program of Section~\ref{sec:lp} agrees to within $2.1\cdot10^{-5}$ with the values that Johnston and Trudgian~\cite{JT26} report for the method of Elsholtz and Schlage-Puchta (Table~\ref{tab:jt}). That solver uses the modulus $3\cdot5\cdot7\cdot13\cdot17\cdot241$, the radical of $2^{24}-1$, whose period is $24$, and a coarser bound for the singular series, and each of its values is an exact lower bound for this linear program. The README of the archive gives the details of the programs and lists further tests of them.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{The linear program for the modulus $3\cdot5\cdot7\cdot13\cdot17\cdot241$ and the values of Johnston and Trudgian~\cite{JT26}.}\label{tab:jt}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Constant for the classes and for the total & Our solver & \cite{JT26}\\
+\midrule
+$8$ & $0.107896$ & $0.10788$\\
+$\Lich$ (a hypothetical case) & $0.125340$ & $0.12532$\\
+$7.8209$, Wu's constant & $0.110125$ & $0.11011$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\section{Formal verification}\label{sec:lean}
+
+We prove Theorems~\ref{thm:uncond} and~\ref{thm:main} in the Lean~4 proof assistant~\cite{Lean4} with the Mathlib library~\cite{Mathlib}. The analytic inputs of Section~\ref{sec:inputs} are hypotheses of the formal theorems: the bound~\eqref{eq:ESP} and the prime number theorem in progressions for the modulus $l_3$, the bound~\eqref{eq:R0}, stated for every finite partial sum of $R_0$, and, for Theorem~\ref{thm:main}, the bound~\eqref{eq:JT}. In~\eqref{eq:ESP} and~\eqref{eq:JT} the hypotheses have the upper bound $0.66016181584686958$ in place of $C_0$, which only weakens them. Lemma~\ref{lem:pintz} is proved, not assumed. The density is formalized as in the introduction: for $N\ge1$ let $d_N$ be $N^{-1}$ times the number of $n\le N$ of the form $p+2^a$ with $p$ prime and $a\ge1$. The formal theorems state $\liminf_{N\to\infty}d_N\ge\Duncond$ and $\liminf_{N\to\infty}d_N\ge\Dmain$.
+
+The proof follows Sections~\ref{sec:moments} to~\ref{sec:series} for $l_3$ and Propositions~\ref{prop:affine} and~\ref{prop:cond}. Since $M(\beta)\ge M(\vartheta e_P)$ and $M_\mu(\beta)\ge M_\mu(\vartheta e_P)$ for every $\beta\in\mathcal S$ (Section~\ref{sec:lp}), it needs only the two values at $\beta=\vartheta e_P$. For the sums $T(c)$ of Lemma~\ref{lem:mean} it computes its own upper bounds by a variant of the method of Section~\ref{sec:series}, in fixed-point integer arithmetic with lower and upper bounds, from a list of primes and orders of $2$ that it certifies: primes above $2^{16}$ by Pratt certificates~\cite{Pra75}, smaller ones by trial division, and each order $t$ by checking $2^t\equiv1$ and $2^{t/r}\not\equiv1$ for the prime factors $r$ of $t$. A few large primes of the factorizations are left out, which only moves their terms to class (c). The stopped branches and their extensions are bounded with $g_m\le\gcd(c,P)$ instead of $g_m\le P$, so that their bound is spread over the numbers $B_g$ of Section~\ref{sec:series}, rounded up, in proportion to $\varphi(g)$ instead of being added to $B_1$. A program written in Lean then evaluates both bounds at $\beta=\vartheta e_P$ in exact rational arithmetic, with the reductions that the program for $l_3$ uses (Appendix~\ref{sec:check}), except that it groups the residues modulo $43\cdot29$ and modulo $23$ by the counts that enter $S_{k,g}$ instead of by orbits; the formulas behind these reductions are proved in Lean. It obtains $0.1108276292\ldots$ and $0.1191809294\ldots$, a little more than the smallest values of Section~\ref{sec:lp} because of the different bound for the stopped branches.
+
+Every computation of the proof is checked by Lean's kernel, and the two theorems depend only on the standard axioms \lean{propext}, \lean{Classical.choice} and \lean{Quot.sound}. For this the evaluation uses a further factorization of $S_{k,g}$, proved correct in Lean, and runs in a separate module for each rotation orbit of the patterns modulo $l'$ and for the empty pattern. The README of the archive gives the directories, the names of the theorems and the versions of Lean and Mathlib, and describes a second version of the proof, with compiled checks, and the earlier formal proofs of the weaker bounds named in the caption of Table~\ref{tab:bounds}.
+
+\section*{Data availability}
+The checking programs, the certificates, the factorization data and the programs that produced them, and the Lean files of Appendix~\ref{sec:lean}, are archived at \href{https://doi.org/\ZENODODOI}{doi:\ZENODODOI} and available at \RepoLink.
+
+\section*{Use of AI tools}
+Generative AI tools were used to find and prove the results, to write the programs, and to draft the text. The author reviewed the arguments and the programs and takes responsibility for the content.
+
+\begin{thebibliography}{99}
+\bibitem{BD66} E. Bombieri and H. Davenport, \emph{Small differences between prime numbers}, Proc. Roy. Soc. Ser. A \textbf{293} (1966), 1--18.
+\bibitem{CDL24} Y. Chen, X. Dai and H. Li, \emph{Some results on a conjecture of de Polignac about numbers of the form $p+2^k$}, arXiv:2402.06644 (2024).
+\bibitem{CS04} Y.-G. Chen and X.-G. Sun, \emph{On Romanoff's constant}, J. Number Theory \textbf{106} (2004), 275--284.
+\bibitem{DDDR20} G. M. Del Corso, I. Del Corso, R. Dvornicich and F. Romani, \emph{On computing the density of integers of the form $2^n+p$}, Math. Comp. \textbf{89} (2020), 2365--2386.
+\bibitem{ESP18} C. Elsholtz and J.-C. Schlage-Puchta, \emph{On Romanov's constant}, Math. Z. \textbf{288} (2018), 713--724.
+\bibitem{Erd50} P. Erd\H{o}s, \emph{On integers of the form $2^k+p$ and some related problems}, Summa Brasil. Math. \textbf{2} (1950), 113--123.
+\bibitem{FLINT} The FLINT team, \emph{FLINT: Fast Library for Number Theory}, \url{https://flintlib.org}.
+\bibitem{HR06} L. Habsieger and X.-F. Roblot, \emph{On integers of the form $p+2^k$}, Acta Arith. \textbf{122} (2006), 45--50.
+\bibitem{HR74} H. Halberstam and H.-E. Richert, \emph{Sieve Methods}, Academic Press, London, 1974.
+\bibitem{HSF10} L. Habsieger and J. Sivak-Fischler, \emph{An effective version of the Bombieri--Vinogradov theorem, and applications to Chen's theorem and to sums of primes and powers of two}, Arch. Math. (Basel) \textbf{95} (2010), 557--566.
+\bibitem{JT26} D. R. Johnston and T. Trudgian, \emph{An update on the Linnik--Goldbach problem}, arXiv:2605.17825v2 (2026).
+\bibitem{Lean4} L.~de~Moura and S.~Ullrich, \emph{The Lean 4 theorem prover and programming language}, in: Automated Deduction -- CADE 28, Lecture Notes in Comput. Sci. \textbf{12699}, Springer, 2021, 625--635.
+\bibitem{Lic23} J. D. Lichtman, \emph{Primes in arithmetic progressions to large moduli, and Goldbach beyond the square-root barrier}, arXiv:2309.08522 (2023).
+\bibitem{Mathlib} The mathlib Community, \emph{The Lean mathematical library}, in: Proc. 9th ACM SIGPLAN Int. Conf. Certified Programs and Proofs (CPP 2020), 2020, 367--381.
+\bibitem{Pin06} J. Pintz, \emph{A note on Romanov's constant}, Acta Math. Hungar. \textbf{112} (2006), 1--14.
+\bibitem{Pra75} V. R. Pratt, \emph{Every prime has a succinct certificate}, SIAM J. Comput. \textbf{4} (1975), 214--220.
+\bibitem{PT15} D. J. Platt and T. S. Trudgian, \emph{Linnik's approximation to Goldbach's conjecture, and other problems}, J. Number Theory \textbf{153} (2015), 54--62.
+\bibitem{Rom83} F. Romani, \emph{Computations concerning primes and powers of two}, Calcolo \textbf{20} (1983), 319--336.
+\bibitem{Rom34} N. P. Romanoff, \emph{\"Uber einige S\"atze der additiven Zahlentheorie}, Math. Ann. \textbf{109} (1934), 668--678.
+\bibitem{vdC50} J. G. van der Corput, \emph{On de Polignac's conjecture}, Simon Stevin \textbf{27} (1950), 99--105.
+\bibitem{Wu04} J. Wu, \emph{Chen's double sieve, Goldbach's conjecture and the twin prime problem}, Acta Arith. \textbf{114} (2004), 215--273.
+\bibitem{Yoo26} A. Yoo, \emph{An improved upper bound on Romanoff's constant}, 2026, \url{https://github.com/andrew-yoo/romanoff}.
+\end{thebibliography}
+
+\end{document}
